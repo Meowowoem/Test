@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>968091439707-9rm5ab9fjpq7ov1l4fvap366td863t47.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.968091439707-9rm5ab9fjpq7ov1l4fvap366td863t47</string>
+	<key>API_KEY</key>
+	<string>AIzaSyD3T4-HBtlEcOHlhUrX9SPuvn_PqW_PNvk</string>
+	<key>GCM_SENDER_ID</key>
+	<string>968091439707</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>meowow.testovoe</string>
+	<key>PROJECT_ID</key>
+	<string>testovoe-8ae15</string>
+	<key>STORAGE_BUCKET</key>
+	<string>testovoe-8ae15.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:968091439707:ios:c8ecbdf92de96b9df7a57e</string>
+	<key>DATABASE_URL</key>
+	<string>https://testovoe-8ae15.firebaseio.com</string>
+</dict>
+</plist>
