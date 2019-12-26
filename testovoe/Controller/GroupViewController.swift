@@ -17,6 +17,9 @@ class GroupViewController: UIViewController {
     
     let refresh = UIRefreshControl()
     
+    override func viewDidAppear(_ animated: Bool) {
+        groupTable.reloadData()
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()

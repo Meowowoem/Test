@@ -8,6 +8,7 @@
 
 import UIKit
 import RealmSwift
+import Firebase
 
 class ProfileViewController: UIViewController {
     
@@ -28,8 +29,6 @@ class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //checkLogin()
-        
         profileView = ProfileView(frame: view.bounds)
         self.view.addSubview(profileView)
         
@@ -37,7 +36,6 @@ class ProfileViewController: UIViewController {
         
         
         
-        //print(currentUser!)
         
         title = "Профиль"
         
@@ -73,12 +71,12 @@ class ProfileViewController: UIViewController {
         navigationController?.pushViewController(GroupViewController(), animated: true)
     }
     
-    func checkLogin() {
-        if currentUser == nil {
-            let loginVC = LoginViewController()
-            navigationController?.pushViewController(loginVC, animated: false)
-        }
-    }
+//    func checkLogin() {
+//        if currentUser == nil {
+//            let loginVC = LoginViewController()
+//            navigationController?.pushViewController(loginVC, animated: false)
+//        }
+//    }
     
     @objc func dismissKeyboard() {
         view.endEditing(true)
@@ -113,9 +111,12 @@ class ProfileViewController: UIViewController {
     //MARK: - Logout
     @objc func exit() {
         
-        
-        navigationController?.pushViewController(LoginViewController(), animated: false)
-        defaults.set(nil, forKey: "currentUser")
+        do {
+            try Auth.auth().signOut()
+        } catch {
+            print(error.localizedDescription)
+        }
+        navigationController?.popViewController(animated: true)
         
     }
     
@@ -179,38 +180,33 @@ class ProfileViewController: UIViewController {
     
     //MARK: - Show profile
     func showProfile() {
-        if currentUser != nil {
-            let user = StorageManager.getDataUsers(currentUser!)
+            //let user = StorageManager.getDataUsers(currentUser!)
             
             //let user = StorageManager.getDataUsers(currentUser!)
             
-            if user.photo == nil {
-                profileView.photoImage.image = UIImage(named: "photo")
-            } else {
-                profileView.photoImage.image = UIImage(data: user.photo!)
-            }
-            
-            profileView.loginTextField.text = user.login
-            profileView.firstNameTextField.text = user.firstName
-            profileView.lastNameTextField.text = user.lastName
-            profileView.dateOfBirthTextField.text = String(describing: user.dateOfBirth)
-            
-            
-            profileView.loginTextField.delegate = self
-            profileView.firstNameTextField.delegate = self
-            profileView.lastNameTextField.delegate = self
-            
-            if user.dateOfBirth != nil {
-                let date = DateFormatter()
-                date.dateFormat = "dd-MM-YYYY"
-                profileView.dateOfBirthTextField.text = date.string(from: user.dateOfBirth!)
-            } else {
-                profileView.dateOfBirthTextField.text = "Не указано"
-            }
-        }
-        else {
-            exit()
-        }
+//            if user.photo == nil {
+//                profileView.photoImage.image = UIImage(named: "photo")
+//            } else {
+//                profileView.photoImage.image = UIImage(data: user.photo!)
+//            }
+//            
+//            profileView.loginTextField.text = user.login
+//            profileView.firstNameTextField.text = user.firstName
+//            profileView.lastNameTextField.text = user.lastName
+//            profileView.dateOfBirthTextField.text = String(describing: user.dateOfBirth)
+//            
+//            
+//            profileView.loginTextField.delegate = self
+//            profileView.firstNameTextField.delegate = self
+//            profileView.lastNameTextField.delegate = self
+//            
+//            if user.dateOfBirth != nil {
+//                let date = DateFormatter()
+//                date.dateFormat = "dd-MM-YYYY"
+//                profileView.dateOfBirthTextField.text = date.string(from: user.dateOfBirth!)
+//            } else {
+//                profileView.dateOfBirthTextField.text = "Не указано"
+//            }
     }
     
     

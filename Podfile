@@ -6,5 +6,8 @@ target 'testovoe' do
   use_frameworks!
 
   pod 'RealmSwift'
+  pod 'Firebase/Analytics'
+  pod 'Firebase/Database'
+  pod 'Firebase/Auth'
 
 end

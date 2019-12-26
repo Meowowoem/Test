@@ -20,6 +20,7 @@
 		5DCEABBE23B0C77400BC8B01 /* GroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DCEABBD23B0C77400BC8B01 /* GroupViewController.swift */; };
 		5DCEABC023B0D50600BC8B01 /* GroupTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DCEABBF23B0D50600BC8B01 /* GroupTableViewCell.swift */; };
 		5DCEABC223B0D50F00BC8B01 /* Group.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DCEABC123B0D50F00BC8B01 /* Group.swift */; };
+		5DD66B3323B48C5E005ED61B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5DD66B3223B48C5E005ED61B /* GoogleService-Info.plist */; };
 		5DD836F423B0EFAF00AD7DB3 /* GroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DD836F323B0EFAF00AD7DB3 /* GroupView.swift */; };
 		5DEC5B7123AF25E400C124DD /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DEC5B7023AF25E400C124DD /* User.swift */; };
 		5DFC1AD123AD5C4600C2B262 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DFC1AD023AD5C4600C2B262 /* LoginView.swift */; };
@@ -41,6 +42,7 @@
 		5DCEABBD23B0C77400BC8B01 /* GroupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupViewController.swift; sourceTree = "<group>"; };
 		5DCEABBF23B0D50600BC8B01 /* GroupTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupTableViewCell.swift; sourceTree = "<group>"; };
 		5DCEABC123B0D50F00BC8B01 /* Group.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Group.swift; sourceTree = "<group>"; };
+		5DD66B3223B48C5E005ED61B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		5DD836F323B0EFAF00AD7DB3 /* GroupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupView.swift; sourceTree = "<group>"; };
 		5DEC5B7023AF25E400C124DD /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		5DFC1AD023AD5C4600C2B262 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
@@ -93,6 +95,7 @@
 				5D1B419B23AD3C2B006233B1 /* Assets.xcassets */,
 				5D1B419D23AD3C2B006233B1 /* LaunchScreen.storyboard */,
 				5D1B41A023AD3C2B006233B1 /* Info.plist */,
+				5DD66B3223B48C5E005ED61B /* GoogleService-Info.plist */,
 			);
 			path = testovoe;
 			sourceTree = "<group>";
@@ -206,6 +209,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5DFC1AD323AD686400C2B262 /* Main.storyboard in Resources */,
+				5DD66B3323B48C5E005ED61B /* GoogleService-Info.plist in Resources */,
 				5D1B419F23AD3C2B006233B1 /* LaunchScreen.storyboard in Resources */,
 				5D1B419C23AD3C2B006233B1 /* Assets.xcassets in Resources */,
 			);
