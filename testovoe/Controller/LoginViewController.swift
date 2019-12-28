@@ -13,18 +13,23 @@ import Firebase
 class LoginViewController: UIViewController {
 
     var loginView: LoginView!
-    var users: Results<User>!
+    //var users: Results<User>!
     
     let defaults = UserDefaults.standard
     let currentUser = UserDefaults.standard.string(forKey: "currentUser")
     
     
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        loginView.loginTextField.text = ""
+        loginView.passwordTextField.text = ""
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        users = realm.objects(User.self)
+        //users = realm.objects(User.self)
         
         
         
@@ -36,7 +41,6 @@ class LoginViewController: UIViewController {
             if user != nil {
                 let profileVC = ProfileViewController()
                 self?.navigationController?.pushViewController(profileVC, animated: true)
-                print("тупая хрень")
             }
         }
 

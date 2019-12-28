@@ -13,7 +13,7 @@ class GroupViewController: UIViewController {
     
     var groupTable: UITableView!
     
-    var groups: Results<Group>!
+    //var groups: Results<Group>!
     
     let refresh = UIRefreshControl()
     
@@ -24,7 +24,7 @@ class GroupViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        groups = realm.objects(Group.self)
+        //groups = realm.objects(Group.self)
         
         
         
@@ -70,17 +70,17 @@ class GroupViewController: UIViewController {
 //MARK: - Table view datasource
 extension GroupViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return groups.count
+        return 3
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! GroupTableViewCell
         
-        let group = groups[indexPath.row]
-        
-        cell.nameLabel.text = group.name
-        cell.descriptionLabel.text = group.descr
-        cell.imageGroup.image = UIImage(data: group.image!)
+//        let group = groups[indexPath.row]
+//
+//        cell.nameLabel.text = group.name
+//        cell.descriptionLabel.text = group.descr
+//        cell.imageGroup.image = UIImage(data: group.image!)
         
         return cell
     }
@@ -90,28 +90,28 @@ extension GroupViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     //MARK: - Send data to GroupVC
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let newGroupVC = NewGroupViewController()
-        newGroupVC.currentName = groups[indexPath.row].name
-        
-        navigationController?.pushViewController(newGroupVC, animated: true)
-    }
-    //MARK: - Delete groups
-    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-    
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        
-        
-        if editingStyle == .delete {
-            let group = groups[indexPath.row]
-            StorageManager.deleteObject(group)
-            tableView.deleteRows(at: [indexPath], with: .automatic)
-            groupTable.reloadData()
-        }
-    }
-    
+//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//        let newGroupVC = NewGroupViewController()
+//        newGroupVC.currentName = groups[indexPath.row].name
+//        
+//        navigationController?.pushViewController(newGroupVC, animated: true)
+//    }
+//    //MARK: - Delete groups
+//    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+//        return true
+//    }
+//    
+//    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+//        
+//        
+//        if editingStyle == .delete {
+//            let group = groups[indexPath.row]
+//            StorageManager.deleteObject(group)
+//            tableView.deleteRows(at: [indexPath], with: .automatic)
+//            groupTable.reloadData()
+//        }
+//    }
+//    
 }
 
 

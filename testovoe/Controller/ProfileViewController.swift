@@ -24,16 +24,55 @@ class ProfileViewController: UIViewController {
     
     var dateBD = Date()
     
+    var user: Person!
     
+    var ref: DatabaseReference!
+    
+    var usersArray = Array<Person>()
+    
+    
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        
+        ref.observe(.value) { [weak self] (snapshot) in
+            
+            
+            
+            
+            if let dictionary = snapshot.value as? [String: AnyObject] {
+                self!.profileView.firstNameTextField.text = dictionary["firstName"] as? String
+                self!.profileView.lastNameTextField.text = dictionary["lastName"] as? String
+                self!.profileView.loginTextField.text = dictionary["nickname"] as? String
+                self!.profileView.dateOfBirthTextField.text = dictionary["dateOfBirth"] as? String
+                let url = URL(string: (dictionary["userImage"] as? String)!)
+                DispatchQueue.global().async { [weak self] in
+                    if let data = try? Data(contentsOf: url!) {
+                        if let image = UIImage(data: data) {
+                            DispatchQueue.main.async {
+                                self?.profileView.photoImage.image = image
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        guard let currentUser = Auth.auth().currentUser else { return }
+        
+        user = Person(user: currentUser)
+
+        ref = Database.database().reference(withPath: "users").child(user.uid!)
         
         profileView = ProfileView(frame: view.bounds)
         self.view.addSubview(profileView)
         
         view.backgroundColor = .white
-        
         
         
         
@@ -158,17 +197,57 @@ class ProfileViewController: UIViewController {
     }
     //MARK: - Save changes
     @objc func saveProfile() {
-        let user = StorageManager.getDataUsers(currentUser!)
+//        let user = StorageManager.getDataUsers(currentUser!)
+//
+//        try! realm.write {
+//            user.login = profileView.loginTextField.text!
+//            user.firstName = profileView.firstNameTextField.text!
+//            user.lastName = profileView.lastNameTextField.text!
+//            user.dateOfBirth = dateBD
+//            user.photo = profileView.photoImage.image?.pngData()
+//        }
         
-        try! realm.write {
-            user.login = profileView.loginTextField.text!
-            user.firstName = profileView.firstNameTextField.text!
-            user.lastName = profileView.lastNameTextField.text!
-            user.dateOfBirth = dateBD
-            user.photo = profileView.photoImage.image?.pngData()
+        //defaults.set(user.login, forKey: "currentUser")
+        
+        let nameImage = NSUUID().uuidString
+        print(nameImage)
+        let storageRef = Storage.storage().reference().child("\(nameImage).png")
+
+        if let uploadData = self.profileView.photoImage.image?.pngData() {
+            storageRef.putData(uploadData, metadata: nil) { (metadata, error) in
+                if error != nil {
+                    print(error!)
+                    return
+                }
+
+                print(metadata!)
+                
+                storageRef.downloadURL { [weak self] (url, error) in
+                    if let downloadUrl = url {
+
+                                      let directoryURL : NSURL = downloadUrl as NSURL
+                                      let urlString:String = directoryURL.absoluteString!
+                                     
+                        let person = Person(firstName: self!.profileView.firstNameTextField.text!,
+                                                       lastName: self!.profileView.lastNameTextField.text!,
+                                                       nickname: self!.profileView.loginTextField.text!,
+                                                       dateOfBirth: self!.profileView.dateOfBirthTextField.text!)
+                                   self!.ref.setValue(["firstName": person.firstName!, "lastName": person.lastName!, "nickname": person.nickname!, "dateOfBirth": person.dateOfBirth!, "userImage": urlString])
+                                  }
+                   
+                }
+            }
         }
         
-        defaults.set(user.login, forKey: "currentUser")
+        
+        
+        
+        
+        
+        
+        
+            
+        
         
         textFieldIsEditing = false
         profileView.photoImage.isUserInteractionEnabled = false
@@ -207,6 +286,8 @@ class ProfileViewController: UIViewController {
 //            } else {
 //                profileView.dateOfBirthTextField.text = "Не указано"
 //            }
+        
+        
     }
     
     

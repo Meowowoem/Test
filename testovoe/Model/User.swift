@@ -6,43 +6,41 @@
 //  Copyright © 2019 Anastasia. All rights reserved.
 //
 
-import RealmSwift
+import Foundation
+import Firebase
 
-class User: Object {
-    @objc dynamic var login = ""
-    @objc dynamic var password = ""
-    @objc dynamic var firstName: String?
-    @objc dynamic var lastName: String?
-    @objc dynamic var dateOfBirth: Date?
-    @objc dynamic var photo: Data?
+class Person {
+    var uid: String?
+    var email: String?
+    var firstName: String?
+    var lastName: String?
+    var nickname: String?
+    var dateOfBirth: String?
+    var ref: DatabaseReference?
     
-    convenience init (login: String, password: String, firstName: String?, lastName: String?, dateOfBirth: Date?, photo: Data?) {
-        self.init()
-        self.login = login
-        self.password = password
-        self.firstName = firstName
-        self.lastName = lastName
-        self.dateOfBirth = dateOfBirth
-        self.photo = photo
+    
+    
+    init(user: User) {
+        self.uid = user.uid
+        self.email = user.email!
     }
     
-//    let users = ["Meow"]
-//    
-//    func saveUsers() {
-//        for user in users {
-//            
-//            let photo = UIImage(named: user)
-//            guard let photoData = photo?.pngData() else { return }
-//            
-//            let newUser = User()
-//            
-//            newUser.login = user
-//            newUser.password = "12345"
-//            newUser.firstName = "Никита"
-//            newUser.lastName = "Сальников"
-//            newUser.dateOfBirth = Date()
-//            newUser.photo = photoData
-//        }
-//    }
+    init(firstName: String, lastName: String, nickname: String, dateOfBirth: String) {
+        self.firstName = firstName
+        self.lastName = lastName
+        self.nickname = nickname
+        self.dateOfBirth = dateOfBirth
+
+    }
+    
+    init(snapshot: DataSnapshot) {
+        let snapshotValue = snapshot.value as! [String: Any]
+        firstName = snapshotValue["firstName"] as? String
+        lastName = snapshotValue["lastName"] as? String
+        nickname = snapshotValue["nickname"] as? String
+        dateOfBirth = snapshotValue["dateOfBirth"] as? String
+        ref = snapshot.ref
+    }
+    
     
 }

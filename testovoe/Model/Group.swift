@@ -6,37 +6,34 @@
 //  Copyright © 2019 Anastasia. All rights reserved.
 //
 
+import Foundation
+import Firebase
 
-import RealmSwift
 
-class Group: Object {
+class Group {
     
-    @objc dynamic var name = ""
-    @objc dynamic var descr = ""
-    @objc dynamic var image: Data?
+    var name: String
+    var descr: String
+    //var image: Data
+    var ref: DatabaseReference?
+    var users: [String]
     
-    convenience init (name: String, descr: String, image: Data?) {
-        self.init()
+    init (name: String, descr: String, users: [String]) {
         self.name = name
         self.descr = descr
-        self.image = image
+        //self.image = image
+        self.users = users
+    }
+    
+    init(snapshot: DataSnapshot) {
+        let snapshotValue = snapshot.value as! [String: Any]
+        name = snapshotValue["name"] as! String
+        descr = snapshotValue["descr"] as! String
+        //image = snapshotValue["image"] as! Data
+        users = snapshotValue["users"] as! [String]
+        ref = snapshot.ref
     }
     
     
-    
-//    func saveGroup() {
-//
-//        for group in allGroups {
-//
-//            let image = UIImage(named: group)
-//            guard let imageData = image?.pngData() else { return }
-//
-//            let newGroup = Group()
-//
-//            newGroup.name = group
-//            newGroup.descr = "Описание группы"
-//            newGroup.image = imageData
-//            StorageManager.saveObjectGroup(newGroup)
-//        }
-//    }
+
 }

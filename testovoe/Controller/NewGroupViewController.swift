@@ -7,7 +7,8 @@
 //
 
 import UIKit
-import RealmSwift
+//import RealmSwift
+import Firebase
 
 class NewGroupViewController: UIViewController {
     
@@ -15,23 +16,33 @@ class NewGroupViewController: UIViewController {
     var textFieldIsEditing = false
     var tableUpdated = false
     
+    var user: Person!
+    var ref: DatabaseReference!
+    var groups = Array<Group>()
+    
     //var groupVC = GroupViewController()
     
     var currentName: String?
     
-    var groups: Results<Group>!
-    var newGroup = Group()
+    //var groups: Results<Group>!
+    //var newGroup = Group()
     var photoIsChanged = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        guard let currentUser = Auth.auth().currentUser else { return }
+        user = Person(user: currentUser)
+        
+        ref = Database.database().reference(withPath: "groups")
+        
         
         if currentName != nil {
             title = "Группа \(currentName!)"
         } else {
             title = "Новая группа"
         }
-        groups = realm.objects(Group.self)
+        //groups = realm.objects(Group.self)
         
         groupView = GroupView(frame: view.bounds)
         self.view.addSubview(groupView)
@@ -40,7 +51,7 @@ class NewGroupViewController: UIViewController {
         let tapGesturePhoto = UITapGestureRecognizer(target: self, action: #selector(pickPhoto(_:)))
         groupView.photoGroup.addGestureRecognizer(tapGesturePhoto)
         
-        showGroup()
+        //showGroup()
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editGroup))
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Назад", style: .plain, target: self, action: #selector(goBack))
@@ -76,17 +87,7 @@ class NewGroupViewController: UIViewController {
     
     //MARK: - Save changes
     @objc func saveGroup() {
-
-        if currentName != nil {
-            let group = StorageManager.getDataGroups(currentName!)
-            let imageData = groupView.photoGroup.image?.pngData()
             
-            try! realm.write {
-                group.name = groupView.nameTextField.text!
-                group.descr = groupView.descriptionTextField.text!
-                group.image = imageData
-            }
-        } else {
             var image: UIImage?
             if photoIsChanged {
                 image = groupView.photoGroup.image
@@ -95,12 +96,12 @@ class NewGroupViewController: UIViewController {
             }
             let imageData = image?.pngData()
             
-            newGroup = Group(name: groupView.nameTextField.text!, descr: groupView.descriptionTextField.text!, image: imageData)
+        let group = Group(name: groupView.nameTextField.text!, descr: groupView.descriptionTextField.text!, users: ["\(self.user.uid)"])
+        let groupRef = self.ref.child(group.name)
+        groupRef.setValue(["name": group.name, "descr": group.descr, "users": group.users])
+        
+        
             
-            try! realm.write {
-                realm.add(newGroup)
-            }
-        }
         textFieldIsEditing = false
         groupView.photoGroup.isUserInteractionEnabled = false
         
@@ -109,24 +110,24 @@ class NewGroupViewController: UIViewController {
         
     }
     
-    func showGroup() {
-        
-        if currentName != nil {
-            let group = StorageManager.getDataGroups(currentName!)
-            
-            groupView.photoGroup.image = UIImage(data: group.image!)
-            groupView.nameTextField.text = group.name
-            groupView.descriptionTextField.text = group.descr
-        } else {
-            groupView.photoGroup.image = UIImage(named: "groupPhoto")
-            groupView.nameTextField.placeholder = "Название"
-            groupView.descriptionTextField.placeholder = "Описание"
-        }
-
-        groupView.nameTextField.delegate = self
-        groupView.descriptionTextField.delegate = self
-        
-    }
+//    func showGroup() {
+//        
+//        if currentName != nil {
+//            let group = StorageManager.getDataGroups(currentName!)
+//            
+//            groupView.photoGroup.image = UIImage(data: group.image!)
+//            groupView.nameTextField.text = group.name
+//            groupView.descriptionTextField.text = group.descr
+//        } else {
+//            groupView.photoGroup.image = UIImage(named: "groupPhoto")
+//            groupView.nameTextField.placeholder = "Название"
+//            groupView.descriptionTextField.placeholder = "Описание"
+//        }
+//
+//        groupView.nameTextField.delegate = self
+//        groupView.descriptionTextField.delegate = self
+//        
+//    }
     
     //MARK: - Choose photo from gallery
     @objc func pickPhoto(_ gesture: UITapGestureRecognizer) {
