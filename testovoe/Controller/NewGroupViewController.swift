@@ -7,7 +7,6 @@
 //
 
 import UIKit
-//import RealmSwift
 import Firebase
 
 class NewGroupViewController: UIViewController {
@@ -96,7 +95,7 @@ class NewGroupViewController: UIViewController {
             }
             let imageData = image?.pngData()
             
-        let group = Group(name: groupView.nameTextField.text!, descr: groupView.descriptionTextField.text!, users: ["\(self.user.uid)"])
+        let group = Group(name: groupView.nameTextField.text!, descr: groupView.descriptionTextField.text!, users: ["\(user.uid)"])
         let groupRef = self.ref.child(group.name)
         groupRef.setValue(["name": group.name, "descr": group.descr, "users": group.users])
         

@@ -17,11 +17,13 @@ class ProfileView: UIView {
     var buttonGroup = UIButton()
     
     var photoImage = UIImageView()
+    var editImageButton = UIButton()
     
     var loginLabel = UILabel()
     var firstNameLabel = UILabel()
     var lastNameLabel = UILabel()
     var dateOfBirthLabel = UILabel()
+    
     
     
     override init (frame: CGRect) {
@@ -59,7 +61,7 @@ class ProfileView: UIView {
         textField.contentVerticalAlignment = .center
         addSubview(textField)
         
-        textField.widthAnchor.constraint(equalToConstant: 200).isActive = true
+        textField.widthAnchor.constraint(equalToConstant: 140).isActive = true
         textField.heightAnchor.constraint(equalToConstant: 20).isActive = true
         textField.topAnchor.constraint(equalTo: photoImage.bottomAnchor, constant: CGFloat(size)).isActive = true
         textField.leftAnchor.constraint(equalTo: photoImage.centerXAnchor, constant: 5).isActive = true
@@ -85,8 +87,9 @@ class ProfileView: UIView {
         photoImage.clipsToBounds = true
         photoImage.translatesAutoresizingMaskIntoConstraints = false
         photoImage.contentMode = .scaleAspectFill
-        
+        photoImage.layer.borderColor = UIColor.black.cgColor
         addSubview(photoImage)
+        
         
         if let superview = photoImage.superview {
             
@@ -94,7 +97,6 @@ class ProfileView: UIView {
             photoImage.leftAnchor.constraint(equalTo: superview.leftAnchor, constant: (UIScreen.main.bounds.width - 160) / 2).isActive = true
             photoImage.heightAnchor.constraint(equalToConstant: 160).isActive = true
             photoImage.widthAnchor.constraint(equalToConstant: 160).isActive = true
-            
         }
         
     }

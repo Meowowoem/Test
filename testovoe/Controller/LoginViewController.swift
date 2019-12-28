@@ -7,16 +7,12 @@
 //
 
 import UIKit
-import RealmSwift
 import Firebase
 
 class LoginViewController: UIViewController {
 
     var loginView: LoginView!
-    //var users: Results<User>!
     
-    let defaults = UserDefaults.standard
-    let currentUser = UserDefaults.standard.string(forKey: "currentUser")
     
     
     
@@ -28,9 +24,6 @@ class LoginViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        //users = realm.objects(User.self)
-        
         
         
         title = "Авторизация"
@@ -65,37 +58,7 @@ class LoginViewController: UIViewController {
         view.endEditing(true)
     }
     
-//    func checkLogin() {
-//        if currentUser != nil {
-//            let profileVC = ProfileViewController()
-//            navigationController?.pushViewController(profileVC, animated: false)
-//        }
-//    }
-    
-    //MARK: - Log in and sing up Realm
-//    @objc func logIn() {
-//        guard let inputLogin = loginView.loginTextField.text, let inputPass = loginView.passwordTextField.text else { return }
-//
-//        let user = StorageManager.getDataUsers(inputLogin)
-//
-//        if inputLogin == user.login && inputPass == user.password {
-//            print("Данные верные!")
-//
-//            defaults.set(user.login, forKey: "currentUser")
-//
-//
-//            let profileVC = ProfileViewController()
-//
-//            navigationController?.pushViewController(profileVC, animated: true)
-//        } else {
-//            print("Такого пользователя не существует!")
-//            loginView.loginButton.isEnabled = false
-//            loginView.loginButton.layer.opacity = 0.2
-//            loginView.registerButton.isEnabled = true
-//            loginView.registerButton.layer.opacity = 1
-//
-//        }
-//    }
+
     //MARK: - Log in and sing up Firebase
         @objc func logIn() {
             guard let inputEmail = loginView.loginTextField.text, let inputPass = loginView.passwordTextField.text else { return }
@@ -108,27 +71,13 @@ class LoginViewController: UIViewController {
                 }
                 if user != nil {
                     print("Данные верные!")
-//                    let profileVC = ProfileViewController()
-//                    self?.navigationController?.pushViewController(profileVC, animated: true)
+
                     return
                 } else {
                     //отобразить лейбл об отсутствии пользователя
                     //self.
                 }
-                
             }
-    
-                //defaults.set(user.login, forKey: "currentUser")
-                
-                
-//            } else {
-//                print("Такого пользователя не существует!")
-//                loginView.loginButton.isEnabled = false
-//                loginView.loginButton.layer.opacity = 0.2
-//                loginView.registerButton.isEnabled = true
-//                loginView.registerButton.layer.opacity = 1
-//
-//            }
         }
     
     //MARK: - Register
@@ -139,6 +88,12 @@ class LoginViewController: UIViewController {
             if error == nil {
                 if user != nil {
                     print("Добавили пользователя!")
+                    guard let currentUser = Auth.auth().currentUser else { return }
+                    let user = Person(user: currentUser)
+
+                    
+                    let ref = Database.database().reference(withPath: "users").child(user.uid!)
+                    ref.setValue(["firstName": "не указано", "lastName": "не указано", "nickname": "не указано", "dateOfBirth": "не указано", "userImage": nil, "email": user.email])
                 } else {
                     print("пользователя нет")
                 }
@@ -151,16 +106,6 @@ class LoginViewController: UIViewController {
         loginView.registerButton.layer.opacity = 0.2
     }
 
-    //MARK: - Add new user
-//    private func addNewUser(_ login: String, _ password: String) {
-//
-//        let newUser = User(login: login, password: password, firstName: nil, lastName: nil, dateOfBirth: nil, photo: nil)
-//
-//        StorageManager.saveObject(newUser)
-//        loginView.loginButton.isEnabled = true
-//        loginView.loginButton.layer.opacity = 1
-//
-//    }
 
     //MARK: - Control text in login text field
     @objc func textFieldChanged() {

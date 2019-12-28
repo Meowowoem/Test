@@ -7,18 +7,11 @@
 //
 
 import UIKit
-import RealmSwift
 import Firebase
 
 class ProfileViewController: UIViewController {
     
-    let currentUser = UserDefaults.standard.string(forKey: "currentUser")
-    
-    let defaults = UserDefaults.standard
-    
     var profileView: ProfileView!
-    
-    var textFieldIsEditing = false
     
     var picker: UIDatePicker!
     
@@ -30,38 +23,21 @@ class ProfileViewController: UIViewController {
     
     var usersArray = Array<Person>()
     
+    var textFieldIsEditing = false
+    
     
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         
-        ref.observe(.value) { [weak self] (snapshot) in
-            
-            
-            
-            
-            if let dictionary = snapshot.value as? [String: AnyObject] {
-                self!.profileView.firstNameTextField.text = dictionary["firstName"] as? String
-                self!.profileView.lastNameTextField.text = dictionary["lastName"] as? String
-                self!.profileView.loginTextField.text = dictionary["nickname"] as? String
-                self!.profileView.dateOfBirthTextField.text = dictionary["dateOfBirth"] as? String
-                let url = URL(string: (dictionary["userImage"] as? String)!)
-                DispatchQueue.global().async { [weak self] in
-                    if let data = try? Data(contentsOf: url!) {
-                        if let image = UIImage(data: data) {
-                            DispatchQueue.main.async {
-                                self?.profileView.photoImage.image = image
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
         
         guard let currentUser = Auth.auth().currentUser else { return }
         
@@ -70,24 +46,16 @@ class ProfileViewController: UIViewController {
         ref = Database.database().reference(withPath: "users").child(user.uid!)
         
         profileView = ProfileView(frame: view.bounds)
+        
         self.view.addSubview(profileView)
         
         view.backgroundColor = .white
         
-        
-        
         title = "Профиль"
-        
-        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .close, target: self, action: #selector(exit))
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editProfile))
         
         showProfile()
         
-        let tapGesturePhoto = UITapGestureRecognizer(target: self, action: #selector(pickPhoto(_:)))
-        profileView.photoImage.addGestureRecognizer(tapGesturePhoto)
-        
-        
-        profileView.dateOfBirthTextField.addTarget(self, action: #selector(chooseDate), for: .editingDidBegin)
+        buttons()
         
         NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillShowNotification, object: nil, queue: nil) { (nc) in
             self.view.frame.origin.y = -150
@@ -97,54 +65,49 @@ class ProfileViewController: UIViewController {
             self.view.frame.origin.y = 0
         }
         
-        let tapKey: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-        view.addGestureRecognizer(tapKey)
-        
-        profileView.buttonGroup.addTarget(self, action: #selector(goToGroups), for: .touchUpInside)
-        
         
         
     }
     
+    func buttons() {
+        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .close, target: self, action: #selector(exit))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editProfile))
+        
+        profileView.buttonGroup.addTarget(self, action: #selector(goToGroups), for: .touchUpInside)
+        
+        let tapGesturePhoto = UITapGestureRecognizer(target: self, action: #selector(pickPhoto(_:)))
+        profileView.photoImage.addGestureRecognizer(tapGesturePhoto)
+        profileView.photoImage.addSubview(profileView.editImageButton)
+    
+        
+        let tapKey: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+               view.addGestureRecognizer(tapKey)
+        
+        
+        profileView.dateOfBirthTextField.addTarget(self, action: #selector(chooseDate), for: .editingDidBegin)
+        
+        
+    }
+    
+    
+    //MARK: - Go to groups
     @objc func goToGroups() {
         navigationController?.pushViewController(GroupViewController(), animated: true)
     }
     
-//    func checkLogin() {
-//        if currentUser == nil {
-//            let loginVC = LoginViewController()
-//            navigationController?.pushViewController(loginVC, animated: false)
-//        }
-//    }
     
-    @objc func dismissKeyboard() {
-        view.endEditing(true)
-    }
     
-    //MARK - Choose date
-    @objc func chooseDate() {
-        print("OK")
+    //MARK: - Allows editing
+    @objc func editProfile() {
+        textFieldIsEditing = true
+        profileView.photoImage.isUserInteractionEnabled = true
+        profileView.photoImage.layer.borderWidth = 4
+        profileView.loginTextField.borderStyle = .roundedRect
+        profileView.firstNameTextField.borderStyle = .roundedRect
+        profileView.lastNameTextField.borderStyle = .roundedRect
+        profileView.dateOfBirthTextField.borderStyle = .roundedRect
         
-        dismissKeyboard()
-        picker = UIDatePicker()
-        picker.datePickerMode = .date
-        
-        
-        let actionSheet = UIAlertController(title: "\n\n\n\n\n\n\n\n\n\n", message: nil, preferredStyle: .actionSheet)
-        actionSheet.view.addSubview(picker)
-        picker.addTarget(self, action: #selector(chooseDateOfBirth), for: .valueChanged)
-        let save = UIAlertAction(title: "Сохранить", style: .default) { _ in
-            let date = DateFormatter()
-            date.dateFormat = "dd-MM-YYYY"
-            self.profileView.dateOfBirthTextField.text = date.string(from: self.picker.date)
-            print(self.profileView.dateOfBirthTextField.text!)
-        }
-        let cancel = UIAlertAction(title: "Отмена", style: .cancel)
-        
-        actionSheet.addAction(save)
-        actionSheet.addAction(cancel)
-        
-        present(actionSheet, animated: true)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveProfile))
     }
     
     //MARK: - Logout
@@ -159,13 +122,98 @@ class ProfileViewController: UIViewController {
         
     }
     
-    //MARK - Allows editing
-    @objc func editProfile() {
-        textFieldIsEditing = true
-        profileView.photoImage.isUserInteractionEnabled = true
+    //MARK: - Show profile
+    func showProfile() {
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveProfile))
+        ref.observe(.value) { [weak self] (snapshot) in
+            
+            if let dictionary = snapshot.value as? [String: AnyObject] {
+                self!.profileView.firstNameTextField.text = dictionary["firstName"] as? String
+                self!.profileView.lastNameTextField.text = dictionary["lastName"] as? String
+                self!.profileView.loginTextField.text = dictionary["nickname"] as? String
+                self!.profileView.dateOfBirthTextField.text = dictionary["dateOfBirth"] as? String
+                guard let urlString = dictionary["userImage"] as? String else {
+                    self?.profileView.photoImage.image = UIImage(named: "personPhoto")
+                    return
+                }
+                let url = URL(string: urlString)
+                DispatchQueue.global().async { [weak self] in
+                    if let data = try? Data(contentsOf: url!) {
+                        if let image = UIImage(data: data) {
+                            DispatchQueue.main.async {
+                                self!.profileView.photoImage.image = image
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    //MARK: - Save changes
+    @objc func saveProfile() {
         
+        let imageName = user.uid
+        let storageRef = Storage.storage().reference().child("\(imageName!).png")
+        
+        if let uploadData = self.profileView.photoImage.image?.pngData() {
+            storageRef.putData(uploadData, metadata: nil) { (metadata, error) in
+                if error != nil {
+                    print(error!)
+                    return
+                }
+                
+                storageRef.downloadURL { [weak self] (url, error) in
+                    if let downloadUrl = url {
+                        
+                        let directoryURL : NSURL = downloadUrl as NSURL
+                        let urlString:String = directoryURL.absoluteString!
+                        
+                        let person = Person(firstName: self!.profileView.firstNameTextField.text!,
+                                            lastName: self!.profileView.lastNameTextField.text!,
+                                            nickname: self!.profileView.loginTextField.text!,
+                                            dateOfBirth: self!.profileView.dateOfBirthTextField.text!)
+                        self!.ref.setValue(["firstName": person.firstName!, "lastName": person.lastName!, "nickname": person.nickname!, "dateOfBirth": person.dateOfBirth!, "userImage": urlString, "email": self!.user.email])
+                    }
+                }
+            }
+        }
+        textFieldIsEditing = false
+        profileView.photoImage.isUserInteractionEnabled = false
+        profileView.photoImage.layer.borderWidth = 0
+        profileView.loginTextField.borderStyle = .none
+        profileView.firstNameTextField.borderStyle = .none
+        profileView.lastNameTextField.borderStyle = .none
+        profileView.dateOfBirthTextField.borderStyle = .none
+        
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editProfile))
+    }
+    
+    //MARK: - Choose date
+    @objc func chooseDate() {
+        print("OK")
+        
+        dismissKeyboard()
+        picker = UIDatePicker()
+        picker.datePickerMode = .date
+        
+        
+        let actionSheet = UIAlertController(title: "\n\n\n\n\n\n\n\n\n\n", message: nil, preferredStyle: .actionSheet)
+        actionSheet.view.addSubview(picker)
+        //picker.addTarget(self, action: #selector(chooseDateOfBirth), for: .valueChanged)
+        let save = UIAlertAction(title: "Сохранить", style: .default) { _ in
+            let date = DateFormatter()
+            date.dateFormat = "dd-MM-YYYY"
+            self.profileView.dateOfBirthTextField.text = date.string(from: self.picker.date)
+            print(self.profileView.dateOfBirthTextField.text!)
+        }
+        let cancel = UIAlertAction(title: "Отмена", style: .cancel)
+        
+        actionSheet.addAction(save)
+        actionSheet.addAction(cancel)
+        
+        present(actionSheet, animated: true)
     }
     
     //MARK: - Choose photo from gallery
@@ -187,111 +235,6 @@ class ProfileViewController: UIViewController {
             present(actionSheet, animated: true)
         }
     }
-    
-    //MARK: - Choose date of birth
-    @objc func chooseDateOfBirth(sender: UIDatePicker) {
-        if sender.isEqual(self.picker) {
-            print(sender.date)
-            dateBD = sender.date
-        }
-    }
-    //MARK: - Save changes
-    @objc func saveProfile() {
-//        let user = StorageManager.getDataUsers(currentUser!)
-//
-//        try! realm.write {
-//            user.login = profileView.loginTextField.text!
-//            user.firstName = profileView.firstNameTextField.text!
-//            user.lastName = profileView.lastNameTextField.text!
-//            user.dateOfBirth = dateBD
-//            user.photo = profileView.photoImage.image?.pngData()
-//        }
-        
-        //defaults.set(user.login, forKey: "currentUser")
-        
-        let nameImage = NSUUID().uuidString
-        print(nameImage)
-        let storageRef = Storage.storage().reference().child("\(nameImage).png")
-
-        if let uploadData = self.profileView.photoImage.image?.pngData() {
-            storageRef.putData(uploadData, metadata: nil) { (metadata, error) in
-                if error != nil {
-                    print(error!)
-                    return
-                }
-
-                print(metadata!)
-                
-                storageRef.downloadURL { [weak self] (url, error) in
-                    if let downloadUrl = url {
-
-                                      let directoryURL : NSURL = downloadUrl as NSURL
-                                      let urlString:String = directoryURL.absoluteString!
-                                     
-                        let person = Person(firstName: self!.profileView.firstNameTextField.text!,
-                                                       lastName: self!.profileView.lastNameTextField.text!,
-                                                       nickname: self!.profileView.loginTextField.text!,
-                                                       dateOfBirth: self!.profileView.dateOfBirthTextField.text!)
-                                   self!.ref.setValue(["firstName": person.firstName!, "lastName": person.lastName!, "nickname": person.nickname!, "dateOfBirth": person.dateOfBirth!, "userImage": urlString])
-                                  }
-                   
-                }
-            }
-        }
-        
-        
-        
-        
-        
-        
-        
-        
-            
-        
-        
-        textFieldIsEditing = false
-        profileView.photoImage.isUserInteractionEnabled = false
-        
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editProfile))
-        
-        
-    }
-    
-    //MARK: - Show profile
-    func showProfile() {
-            //let user = StorageManager.getDataUsers(currentUser!)
-            
-            //let user = StorageManager.getDataUsers(currentUser!)
-            
-//            if user.photo == nil {
-//                profileView.photoImage.image = UIImage(named: "photo")
-//            } else {
-//                profileView.photoImage.image = UIImage(data: user.photo!)
-//            }
-//            
-//            profileView.loginTextField.text = user.login
-//            profileView.firstNameTextField.text = user.firstName
-//            profileView.lastNameTextField.text = user.lastName
-//            profileView.dateOfBirthTextField.text = String(describing: user.dateOfBirth)
-//            
-//            
-//            profileView.loginTextField.delegate = self
-//            profileView.firstNameTextField.delegate = self
-//            profileView.lastNameTextField.delegate = self
-//            
-//            if user.dateOfBirth != nil {
-//                let date = DateFormatter()
-//                date.dateFormat = "dd-MM-YYYY"
-//                profileView.dateOfBirthTextField.text = date.string(from: user.dateOfBirth!)
-//            } else {
-//                profileView.dateOfBirthTextField.text = "Не указано"
-//            }
-        
-        
-    }
-    
-    
-    
 }
 
 extension ProfileViewController: UITextFieldDelegate {
@@ -303,6 +246,10 @@ extension ProfileViewController: UITextFieldDelegate {
         }
     }
     
+    //MARK: - Hide keyboard
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
+    }
 }
 
 //MARK: - Work with photo
