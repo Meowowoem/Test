@@ -13,6 +13,7 @@
 		5D1B419423AD3C28006233B1 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D1B419323AD3C28006233B1 /* LoginViewController.swift */; };
 		5D1B419C23AD3C2B006233B1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5D1B419B23AD3C2B006233B1 /* Assets.xcassets */; };
 		5D1B419F23AD3C2B006233B1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5D1B419D23AD3C2B006233B1 /* LaunchScreen.storyboard */; };
+		5D31F84B23B8B39D00DF4910 /* GroupUsersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D31F84A23B8B39C00DF4910 /* GroupUsersViewController.swift */; };
 		5D50DD8B23ADAAEF00EDB29D /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D50DD8A23ADAAEF00EDB29D /* ProfileViewController.swift */; };
 		5D8EC26423B0EC100046E5B9 /* NewGroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D8EC26323B0EC100046E5B9 /* NewGroupViewController.swift */; };
 		5DCEABB623B00C5800BC8B01 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DCEABB523B00C5800BC8B01 /* ProfileView.swift */; };
@@ -34,6 +35,7 @@
 		5D1B419B23AD3C2B006233B1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5D1B419E23AD3C2B006233B1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5D1B41A023AD3C2B006233B1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5D31F84A23B8B39C00DF4910 /* GroupUsersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupUsersViewController.swift; sourceTree = "<group>"; };
 		5D50DD8A23ADAAEF00EDB29D /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		5D8EC26323B0EC100046E5B9 /* NewGroupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGroupViewController.swift; sourceTree = "<group>"; };
 		5DCEABB523B00C5800BC8B01 /* ProfileView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
@@ -88,11 +90,11 @@
 				5D50DD8923AD976300EDB29D /* Model */,
 				5D50DD8723AD975200EDB29D /* View */,
 				5D50DD8823AD975C00EDB29D /* Controller */,
-				5DFC1AD223AD686400C2B262 /* Main.storyboard */,
 				5D1B419B23AD3C2B006233B1 /* Assets.xcassets */,
 				5D1B419D23AD3C2B006233B1 /* LaunchScreen.storyboard */,
 				5D1B41A023AD3C2B006233B1 /* Info.plist */,
 				5DD66B3223B48C5E005ED61B /* GoogleService-Info.plist */,
+				5DFC1AD223AD686400C2B262 /* Main.storyboard */,
 			);
 			path = testovoe;
 			sourceTree = "<group>";
@@ -115,6 +117,7 @@
 				5D50DD8A23ADAAEF00EDB29D /* ProfileViewController.swift */,
 				5DCEABBD23B0C77400BC8B01 /* GroupViewController.swift */,
 				5D8EC26323B0EC100046E5B9 /* NewGroupViewController.swift */,
+				5D31F84A23B8B39C00DF4910 /* GroupUsersViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -273,6 +276,7 @@
 				5DEC5B7123AF25E400C124DD /* Person.swift in Sources */,
 				5DCEABC223B0D50F00BC8B01 /* Group.swift in Sources */,
 				5DCEABC023B0D50600BC8B01 /* GroupTableViewCell.swift in Sources */,
+				5D31F84B23B8B39D00DF4910 /* GroupUsersViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

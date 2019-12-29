@@ -14,6 +14,7 @@ class LoginView: UIView {
     var passwordTextField: UITextField!
     var loginButton: UIButton!
     var registerButton: UIButton!
+    var loginInfoLabel: UILabel!
     
     
     
@@ -23,6 +24,16 @@ class LoginView: UIView {
         setupTextField()
         setupButtons()
         
+        loginInfoLabel = UILabel()
+        loginInfoLabel.font = UIFont.systemFont(ofSize: 16)
+        loginInfoLabel.textColor = .red
+        loginInfoLabel.alpha = 0
+        loginInfoLabel.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(loginInfoLabel)
+        
+        loginInfoLabel.bottomAnchor.constraint(equalTo: loginTextField.topAnchor, constant: -10).isActive = true
+        loginInfoLabel.centerXAnchor.constraint(equalTo: loginTextField.centerXAnchor, constant: 0).isActive = true
+    
     }
     
     
@@ -34,7 +45,7 @@ class LoginView: UIView {
     func setupTextField() {
 
         loginTextField = UITextField()
-        loginTextField.placeholder = "Login"
+        loginTextField.placeholder = "Email"
         loginTextField.translatesAutoresizingMaskIntoConstraints = false
         loginTextField.textAlignment = .center
         loginTextField.borderStyle = .roundedRect

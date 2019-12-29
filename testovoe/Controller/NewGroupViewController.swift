@@ -14,17 +14,10 @@ class NewGroupViewController: UIViewController {
     var groupView: GroupView!
     var textFieldIsEditing = false
     var tableUpdated = false
-    
     var user: Person!
     var ref: DatabaseReference!
     var groups = Array<Group>()
-    
-    //var groupVC = GroupViewController()
-    
-    var currentName: String?
-    
-    //var groups: Results<Group>!
-    //var newGroup = Group()
+    var currentId: String?
     var photoIsChanged = false
     
     override func viewDidLoad() {
@@ -32,39 +25,63 @@ class NewGroupViewController: UIViewController {
         
         guard let currentUser = Auth.auth().currentUser else { return }
         user = Person(user: currentUser)
-        
-        ref = Database.database().reference(withPath: "groups")
-        
-        
-        if currentName != nil {
-            title = "Группа \(currentName!)"
-        } else {
-            title = "Новая группа"
-        }
-        //groups = realm.objects(Group.self)
-        
+        ref = Database.database().reference().child("groups")
+        currentTitle()
         groupView = GroupView(frame: view.bounds)
         self.view.addSubview(groupView)
         view.backgroundColor = .white
-        
-        let tapGesturePhoto = UITapGestureRecognizer(target: self, action: #selector(pickPhoto(_:)))
-        groupView.photoGroup.addGestureRecognizer(tapGesturePhoto)
-        
-        //showGroup()
-        
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editGroup))
+        showGroup()
+        buttons()
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Назад", style: .plain, target: self, action: #selector(goBack))
-        
         NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillShowNotification, object: nil, queue: nil) { (nc) in
             self.view.frame.origin.y = -150
         }
-        
         NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillHideNotification, object: nil, queue: nil) { (nc) in
             self.view.frame.origin.y = 0
         }
+    }
+    
+    func buttons() {
+        groupView.memberButton.addTarget(self, action: #selector(goMembers), for: .touchUpInside)
+        let tapGesturePhoto = UITapGestureRecognizer(target: self, action: #selector(pickPhoto(_:)))
+        groupView.photoGroup.addGestureRecognizer(tapGesturePhoto)
+        
+        
+        
+        if currentId != nil {
+            navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editGroup))
+        } else {
+            textFieldIsEditing = true
+            groupView.photoGroup.isUserInteractionEnabled = true
+            navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveGroup))
+            navigationItem.rightBarButtonItem?.isEnabled = false
+        }
+        
+        groupView.nameTextField.addTarget(self, action: #selector(textFieldChanged), for: .editingChanged)
+        groupView.descriptionTextField.addTarget(self, action: #selector(textFieldChanged), for: .editingChanged)
         
         let tapKey: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tapKey)
+    }
+    
+    func currentTitle() {
+        if currentId != nil {
+            ref.child(currentId!).observeSingleEvent(of: .value) { [weak self] snapshot in
+                let value = snapshot.value as? NSDictionary
+                let name = value?["name"] as? String ?? ""
+                self?.title = "Группа \"\(name)\""
+            }
+        } else {
+            title = "Новая группа"
+        }
+    }
+    
+    @objc func textFieldChanged() {
+        if groupView.nameTextField.text?.isEmpty == false && groupView.descriptionTextField.text?.isEmpty == false {
+            navigationItem.rightBarButtonItem?.isEnabled = true
+        } else {
+            navigationItem.rightBarButtonItem?.isEnabled = false
+        }
     }
     
     @objc func dismissKeyboard() {
@@ -76,9 +93,19 @@ class NewGroupViewController: UIViewController {
         tableUpdated = true
     }
     
+    @objc func goMembers() {
+        let membersVC = GroupUsersViewController()
+        membersVC.currentId = currentId!
+        self.navigationController?.pushViewController(membersVC, animated: true)
+    }
+    
+    
+    
     @objc func editGroup() {
         textFieldIsEditing = true
         groupView.photoGroup.isUserInteractionEnabled = true
+        groupView.nameTextField.borderStyle = .roundedRect
+        groupView.descriptionTextField.borderStyle = .roundedRect
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveGroup))
         
@@ -86,47 +113,97 @@ class NewGroupViewController: UIViewController {
     
     //MARK: - Save changes
     @objc func saveGroup() {
-            
-            var image: UIImage?
-            if photoIsChanged {
-                image = groupView.photoGroup.image
-            } else {
-                image = #imageLiteral(resourceName: "groupPhoto")
+        
+        let imageName = groupView.nameTextField.text
+        let storageRef = Storage.storage().reference().child("\(imageName!).png")
+        
+        if let uploadData = self.groupView.photoGroup.image?.pngData() {
+            storageRef.putData(uploadData, metadata: nil) { (metadata, error) in
+                if error != nil {
+                    print(error!)
+                    return
+                }
+                
+                storageRef.downloadURL { [weak self] (url, error) in
+                    if let downloadUrl = url {
+                        
+                        
+                        let directoryURL : NSURL = downloadUrl as NSURL
+                        let urlString: String = directoryURL.absoluteString!
+                        let group = Group(name: self!.groupView.nameTextField.text!, descr: self!.groupView.descriptionTextField.text!, users: "Admin")
+                        if self!.currentId != nil {
+                            self!.ref?.child(self!.currentId!).updateChildValues(["name": group.name, "descr": group.descr, "groupImage": urlString])
+                            //self!.ref?.child(self!.currentId!).setValue(["name": group.name, "descr": group.descr, "users": group.users, "groupImage": urlString, "id": self!.currentId!])
+                        } else {
+                            let id = UUID().uuidString
+                            let groupRef = self?.ref.child(id)
+                            groupRef?.setValue(["name": group.name, "descr": group.descr, "users": group.users, "groupImage": urlString, "id": id])
+                        }
+                        
+                    }
+                }
             }
-            let imageData = image?.pngData()
-            
-        let group = Group(name: groupView.nameTextField.text!, descr: groupView.descriptionTextField.text!, users: ["\(user.uid)"])
-        let groupRef = self.ref.child(group.name)
-        groupRef.setValue(["name": group.name, "descr": group.descr, "users": group.users])
+        }
         
-        
-            
         textFieldIsEditing = false
         groupView.photoGroup.isUserInteractionEnabled = false
+        groupView.nameTextField.borderStyle = .none
+        groupView.descriptionTextField.borderStyle = .none
         
+        if currentId != nil {
+            navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editGroup))
+        } else {
+            navigationController?.popViewController(animated: true)
+        }
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editGroup))
         
     }
     
-//    func showGroup() {
-//        
-//        if currentName != nil {
-//            let group = StorageManager.getDataGroups(currentName!)
-//            
-//            groupView.photoGroup.image = UIImage(data: group.image!)
-//            groupView.nameTextField.text = group.name
-//            groupView.descriptionTextField.text = group.descr
-//        } else {
-//            groupView.photoGroup.image = UIImage(named: "groupPhoto")
-//            groupView.nameTextField.placeholder = "Название"
-//            groupView.descriptionTextField.placeholder = "Описание"
-//        }
-//
-//        groupView.nameTextField.delegate = self
-//        groupView.descriptionTextField.delegate = self
-//        
-//    }
+    func showGroup() {
+        
+        
+        
+        if currentId != nil {
+            
+            
+            let showGroupRef = ref.child(currentId!)
+            
+            showGroupRef.observe(.value) { [weak self] (snapshot) in
+                
+                if let dictionary = snapshot.value as? [String: AnyObject] {
+                    
+                    self?.groupView.nameTextField.text = dictionary["name"] as? String
+                    self?.groupView.descriptionTextField.text = dictionary["descr"] as? String
+                    guard let urlString = dictionary["groupImage"] as? String else {
+                        self?.groupView.photoGroup.image = UIImage(named: "groupPhoto")
+                        return
+                    }
+                    let url = URL(string: urlString)
+                    DispatchQueue.global().async { [weak self] in
+                        if let data = try? Data(contentsOf: url!) {
+                            if let image = UIImage(data: data) {
+                                DispatchQueue.main.async {
+                                    self!.groupView.photoGroup.image = image
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } else {
+            groupView.nameTextField.borderStyle = .roundedRect
+            groupView.descriptionTextField.borderStyle = .roundedRect
+            
+            groupView.memberButton.isHidden = true
+            groupView.photoGroup.image = UIImage(named: "groupPhoto")
+            groupView.nameTextField.placeholder = "Название"
+            groupView.descriptionTextField.placeholder = "Описание"
+        }
+        
+        groupView.nameTextField.delegate = self
+        groupView.descriptionTextField.delegate = self
+        
+    }
     
     //MARK: - Choose photo from gallery
     @objc func pickPhoto(_ gesture: UITapGestureRecognizer) {

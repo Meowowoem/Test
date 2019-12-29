@@ -19,6 +19,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     let profileVC = ProfileViewController()
     let groupVC = GroupViewController()
     let tabBarVC = UITabBarController()
+    let userGroupVC = GroupUsersViewController()
 
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
@@ -27,16 +28,19 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         viewController = LoginViewController()
         
+        groupVC.tabBarItem = UITabBarItem(title: "Группы", image: UIImage(named: "groupTab"), tag: 1)
+        loginVC.tabBarItem = UITabBarItem(title: "Профиль", image: UIImage(named: "profileTab"), tag: 0)
 //        navController = UINavigationController(rootViewController: viewController)
         let firstNavController = UINavigationController(rootViewController: loginVC)
         let secondNavController = UINavigationController(rootViewController: profileVC)
         let thirdNavController = UINavigationController(rootViewController: groupVC)
+        //let fourthNavController = UINavigationController(rootViewController: userGroupVC)
         
-        tabBarVC.setViewControllers([secondNavController, thirdNavController], animated: true)
-           
+        tabBarVC.setViewControllers([firstNavController, thirdNavController], animated: true)
+        groupVC.view.reloadInputViews()
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(frame: UIScreen.main.bounds)
-        window?.rootViewController = thirdNavController
+        window?.rootViewController = tabBarVC
         window?.makeKeyAndVisible()
         window?.windowScene = windowScene
     }

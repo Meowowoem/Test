@@ -14,14 +14,14 @@ class Group {
     
     var name: String
     var descr: String
-    //var image: Data
+    var image: String?
     var ref: DatabaseReference?
-    var users: [String]
+    var users: String
+    var id: String?
     
-    init (name: String, descr: String, users: [String]) {
+    init (name: String, descr: String, users: String) {
         self.name = name
         self.descr = descr
-        //self.image = image
         self.users = users
     }
     
@@ -29,9 +29,10 @@ class Group {
         let snapshotValue = snapshot.value as! [String: Any]
         name = snapshotValue["name"] as! String
         descr = snapshotValue["descr"] as! String
-        //image = snapshotValue["image"] as! Data
-        users = snapshotValue["users"] as! [String]
+        image = snapshotValue["groupImage"] as? String
+        users = snapshotValue["users"] as! String
         ref = snapshot.ref
+        id = snapshotValue["id"] as? String
     }
     
     

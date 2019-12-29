@@ -78,7 +78,7 @@ class ProfileView: UIView {
         
         label.rightAnchor.constraint(equalTo: photoImage.centerXAnchor, constant: -5).isActive = true
         label.topAnchor.constraint(equalTo: photoImage.bottomAnchor, constant: CGFloat(size)).isActive = true
-        label.widthAnchor.constraint(equalToConstant: 200).isActive = true
+        label.widthAnchor.constraint(equalToConstant: 160).isActive = true
         label.heightAnchor.constraint(equalToConstant: 20).isActive = true
     }
     
@@ -106,6 +106,7 @@ class ProfileView: UIView {
         buttonGroup.setTitle("Группы", for: .normal)
         buttonGroup.backgroundColor = .black
         buttonGroup.layer.cornerRadius = 5
+        buttonGroup.isHidden = true
         addSubview(buttonGroup)
         
         

@@ -20,6 +20,8 @@ class GroupView: UIView {
     var quantityLabel = UILabel()
     var descriptionLabel = UILabel()
     
+    var memberButton = UIButton()
+    
 
     override init (frame: CGRect) {
         super.init(frame: frame)
@@ -35,9 +37,6 @@ class GroupView: UIView {
         //setupLabel(label: quantityLabel, text: "Пользователей", size: 80)
         setupLabel(label: descriptionLabel, text: "Описание", size: 80)
         
-        
-        
-        
     }
     
     
@@ -52,11 +51,10 @@ class GroupView: UIView {
         textField.contentVerticalAlignment = .center
         addSubview(textField)
         
-        textField.widthAnchor.constraint(equalToConstant: 200).isActive = true
+        textField.widthAnchor.constraint(equalToConstant: 150).isActive = true
         textField.heightAnchor.constraint(equalToConstant: 20).isActive = true
         textField.topAnchor.constraint(equalTo: photoGroup.bottomAnchor, constant: CGFloat(size)).isActive = true
         textField.leftAnchor.constraint(equalTo: photoGroup.centerXAnchor, constant: 5).isActive = true
-        
     }
     
     func setupLabel(label: UILabel, text: String, size: Int) {
@@ -83,12 +81,21 @@ class GroupView: UIView {
         
         if let superview = photoGroup.superview {
         
-        photoGroup.topAnchor.constraint(equalTo: superview.topAnchor, constant: 100).isActive = true
+        photoGroup.topAnchor.constraint(equalTo: superview.topAnchor, constant: 120).isActive = true
         photoGroup.leftAnchor.constraint(equalTo: superview.leftAnchor, constant: (UIScreen.main.bounds.width - 160) / 2).isActive = true
         photoGroup.heightAnchor.constraint(equalToConstant: 160).isActive = true
         photoGroup.widthAnchor.constraint(equalToConstant: 160).isActive = true
-        
+            
+            memberButton.translatesAutoresizingMaskIntoConstraints = false
+            memberButton.setTitle("Пользователи", for: .normal)
+            memberButton.backgroundColor = .black
+            memberButton.layer.cornerRadius = 5
+            addSubview(memberButton)
+            
+            memberButton.topAnchor.constraint(equalTo: photoGroup.bottomAnchor, constant: 150).isActive = true
+            memberButton.heightAnchor.constraint(equalToConstant: 20).isActive = true
+            memberButton.widthAnchor.constraint(equalToConstant: 150).isActive = true
+            memberButton.centerXAnchor.constraint(equalTo: photoGroup.centerXAnchor).isActive = true
         }
     }
-    
 }

@@ -30,6 +30,7 @@ class ProfileViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        navigationController?.navigationBar.prefersLargeTitles = false
         
         
     }
@@ -39,10 +40,13 @@ class ProfileViewController: UIViewController {
         
         
         
-        guard let currentUser = Auth.auth().currentUser else { return }
+        guard let currentUser = Auth.auth().currentUser else {
+            navigationController?.pushViewController(LoginViewController(), animated: true)
+            return
+        }
         
         user = Person(user: currentUser)
-
+        
         ref = Database.database().reference(withPath: "users").child(user.uid!)
         
         profileView = ProfileView(frame: view.bounds)
@@ -52,6 +56,7 @@ class ProfileViewController: UIViewController {
         view.backgroundColor = .white
         
         title = "Профиль"
+        
         
         showProfile()
         
@@ -78,14 +83,14 @@ class ProfileViewController: UIViewController {
         let tapGesturePhoto = UITapGestureRecognizer(target: self, action: #selector(pickPhoto(_:)))
         profileView.photoImage.addGestureRecognizer(tapGesturePhoto)
         profileView.photoImage.addSubview(profileView.editImageButton)
-    
+        
         
         let tapKey: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-               view.addGestureRecognizer(tapKey)
+        view.addGestureRecognizer(tapKey)
         
         
         profileView.dateOfBirthTextField.addTarget(self, action: #selector(chooseDate), for: .editingDidBegin)
-        
+        profileView.loginTextField.addTarget(self, action: #selector(textFieldChanged), for: .editingChanged)
         
     }
     
@@ -100,6 +105,7 @@ class ProfileViewController: UIViewController {
     //MARK: - Allows editing
     @objc func editProfile() {
         textFieldIsEditing = true
+        navigationItem.rightBarButtonItem?.isEnabled = false
         profileView.photoImage.isUserInteractionEnabled = true
         profileView.photoImage.layer.borderWidth = 4
         profileView.loginTextField.borderStyle = .roundedRect
@@ -250,6 +256,14 @@ extension ProfileViewController: UITextFieldDelegate {
     @objc func dismissKeyboard() {
         view.endEditing(true)
     }
+    
+    @objc func textFieldChanged() {
+        if profileView.loginTextField.text?.isEmpty == false {
+            navigationItem.rightBarButtonItem?.isEnabled = true
+        } else {
+            navigationItem.rightBarButtonItem?.isEnabled = false
+        }
+    }
 }
 
 //MARK: - Work with photo
@@ -271,5 +285,7 @@ extension ProfileViewController: UIImagePickerControllerDelegate, UINavigationCo
         profileView.photoImage.clipsToBounds = true
         dismiss(animated: true)
     }
+    
+    
 }
 
