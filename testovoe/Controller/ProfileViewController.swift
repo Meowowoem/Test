@@ -25,12 +25,12 @@ class ProfileViewController: UIViewController {
     
     var textFieldIsEditing = false
     
+    var currentLogin = ""
+    
     
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        navigationController?.navigationBar.prefersLargeTitles = false
         
         
     }
@@ -57,6 +57,7 @@ class ProfileViewController: UIViewController {
         
         title = "Профиль"
         
+        print(currentLogin)
         
         showProfile()
         

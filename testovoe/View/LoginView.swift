@@ -10,19 +10,39 @@ import UIKit
 
 class LoginView: UIView {
     
-    var loginTextField: UITextField!
-    var passwordTextField: UITextField!
+    var loginTextField = UITextField()
+    var passwordTextField = UITextField()
+    
+    var firstNameTextField = UITextField()
+    var lastNameTextField = UITextField()
+    var emailTextField = UITextField()
+    
+    var containerTextField: UIStackView!
+    
+    
     var loginButton: UIButton!
     var registerButton: UIButton!
     var loginInfoLabel: UILabel!
+    var loginSegmentedControl: UISegmentedControl!
     
     
     
     override init (frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .white
-        setupTextField()
+        setupContainer()
+        setupTextField(textField: loginTextField, placeholder: "Логин", tag: 0)
+        setupTextField(textField: passwordTextField, placeholder: "Пароль", tag: 1)
+        setupTextField(textField: firstNameTextField, placeholder: "Имя", tag: 2)
+        setupTextField(textField: lastNameTextField, placeholder: "Фамилия", tag: 3)
+        setupTextField(textField: emailTextField, placeholder: "Email", tag: 4)
+        
+        firstNameTextField.isHidden = true
+        lastNameTextField.isHidden = true
+        emailTextField.isHidden = true
+        
         setupButtons()
+        setupSegment()
         
         loginInfoLabel = UILabel()
         loginInfoLabel.font = UIFont.systemFont(ofSize: 16)
@@ -31,8 +51,10 @@ class LoginView: UIView {
         loginInfoLabel.translatesAutoresizingMaskIntoConstraints = false
         addSubview(loginInfoLabel)
         
-        loginInfoLabel.bottomAnchor.constraint(equalTo: loginTextField.topAnchor, constant: -10).isActive = true
-        loginInfoLabel.centerXAnchor.constraint(equalTo: loginTextField.centerXAnchor, constant: 0).isActive = true
+        loginInfoLabel.bottomAnchor.constraint(equalTo: containerTextField.topAnchor, constant: -10).isActive = true
+        loginInfoLabel.centerXAnchor.constraint(equalTo: containerTextField.centerXAnchor, constant: 0).isActive = true
+        
+        
     
     }
     
@@ -42,41 +64,54 @@ class LoginView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setupTextField() {
-
-        loginTextField = UITextField()
-        loginTextField.placeholder = "Email"
-        loginTextField.translatesAutoresizingMaskIntoConstraints = false
-        loginTextField.textAlignment = .center
-        loginTextField.borderStyle = .roundedRect
-        addSubview(loginTextField)
-
-        passwordTextField = UITextField()
-        passwordTextField.placeholder = "Password"
-        passwordTextField.isSecureTextEntry = true
-        passwordTextField.textAlignment = .center
-        passwordTextField.translatesAutoresizingMaskIntoConstraints = false
-        passwordTextField.borderStyle = .roundedRect
-        addSubview(passwordTextField)
-
-        if let superview = loginTextField.superview {
-            loginTextField.topAnchor.constraint(equalTo: superview.topAnchor, constant: 200).isActive = true
-            loginTextField.centerXAnchor.constraint(equalTo: superview.centerXAnchor).isActive = true
-            loginTextField.widthAnchor.constraint(equalToConstant: 200).isActive = true
-            loginTextField.heightAnchor.constraint(equalToConstant: 30).isActive = true
-
-            passwordTextField.topAnchor.constraint(equalTo: loginTextField.bottomAnchor, constant: 5).isActive = true
-            passwordTextField.centerXAnchor.constraint(equalTo: loginTextField.centerXAnchor).isActive = true
-            passwordTextField.heightAnchor.constraint(equalToConstant: 30).isActive = true
-            passwordTextField.widthAnchor.constraint(equalToConstant: 200).isActive = true
-            }
+    func setupContainer() {
+        containerTextField = UIStackView()
+        containerTextField.translatesAutoresizingMaskIntoConstraints = false
+        containerTextField.alignment = .center
+        containerTextField.distribution = .fillEqually
+        containerTextField.axis = .vertical
+        containerTextField.spacing = 10
+        addSubview(containerTextField)
+        
+        containerTextField.leftAnchor.constraint(equalTo: containerTextField.superview!.leftAnchor, constant: 0).isActive = true
+        containerTextField.rightAnchor.constraint(equalTo: containerTextField.superview!.rightAnchor, constant: 0).isActive = true
+        containerTextField.centerYAnchor.constraint(equalTo: containerTextField.superview!.centerYAnchor, constant: 0).isActive = true
     }
+    
+    func setupTextField(textField: UITextField, placeholder: String, tag: Int) {
+        textField.placeholder = placeholder
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.textAlignment = .center
+        textField.borderStyle = .roundedRect
+        textField.tag = tag
+        containerTextField.addArrangedSubview(textField)
+        
+        
+        textField.centerXAnchor.constraint(equalTo: containerTextField.centerXAnchor).isActive = true
+        textField.widthAnchor.constraint(equalTo: containerTextField.widthAnchor, multiplier: 0.8).isActive = true
+        textField.heightAnchor.constraint(equalToConstant: 30).isActive = true
+    }
+    
+    func setupSegment() {
+        loginSegmentedControl = UISegmentedControl(items: ["Авторизация", "Регистрация"])
+        loginSegmentedControl.translatesAutoresizingMaskIntoConstraints = false
+        
+        addSubview(loginSegmentedControl)
+        
+        loginSegmentedControl.bottomAnchor.constraint(equalTo: containerTextField.topAnchor, constant: -20).isActive = true
+        loginSegmentedControl.leftAnchor.constraint(equalTo: containerTextField.leftAnchor, constant: 50).isActive = true
+        loginSegmentedControl.rightAnchor.constraint(equalTo: containerTextField.rightAnchor, constant: -50).isActive = true
+        
+    }
+    
+    
+
 
     func setupButtons() {
         
         loginButton = UIButton()
         loginButton.backgroundColor = .black
-        loginButton.setTitle("Login", for: .normal)
+        loginButton.setTitle("Войти", for: .normal)
         loginButton.translatesAutoresizingMaskIntoConstraints = false
         loginButton.layer.cornerRadius = 5
         loginButton.isEnabled = false
@@ -85,21 +120,22 @@ class LoginView: UIView {
         
         registerButton = UIButton()
         registerButton.backgroundColor = .black
-        registerButton.setTitle("Registration", for: .normal)
+        registerButton.setTitle("Регистрация", for: .normal)
         registerButton.translatesAutoresizingMaskIntoConstraints = false
         registerButton.layer.cornerRadius = 5
-//        registerButton.isEnabled = false
-//        registerButton.layer.opacity = 0.2
+        registerButton.isHidden = true
+        registerButton.isEnabled = false
+        registerButton.layer.opacity = 0.2
         addSubview(registerButton)
         
 
-        loginButton.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 20).isActive = true
-        loginButton.centerXAnchor.constraint(equalTo: loginTextField.centerXAnchor).isActive = true
+        loginButton.topAnchor.constraint(equalTo: containerTextField.bottomAnchor, constant: 20).isActive = true
+        loginButton.centerXAnchor.constraint(equalTo: containerTextField.centerXAnchor).isActive = true
         loginButton.heightAnchor.constraint(equalToConstant: 30).isActive = true
         loginButton.widthAnchor.constraint(equalToConstant: 200).isActive = true
         
-        registerButton.topAnchor.constraint(equalTo: loginButton.bottomAnchor, constant: 5).isActive = true
-        registerButton.centerXAnchor.constraint(equalTo: loginTextField.centerXAnchor).isActive = true
+        registerButton.topAnchor.constraint(equalTo: containerTextField.bottomAnchor, constant: 20).isActive = true
+        registerButton.centerXAnchor.constraint(equalTo: containerTextField.centerXAnchor).isActive = true
         registerButton.heightAnchor.constraint(equalToConstant: 30).isActive = true
         registerButton.widthAnchor.constraint(equalToConstant: 200).isActive = true
     }

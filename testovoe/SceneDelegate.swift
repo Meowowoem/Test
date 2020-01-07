@@ -32,7 +32,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         loginVC.tabBarItem = UITabBarItem(title: "Профиль", image: UIImage(named: "profileTab"), tag: 0)
 //        navController = UINavigationController(rootViewController: viewController)
         let firstNavController = UINavigationController(rootViewController: loginVC)
-        let secondNavController = UINavigationController(rootViewController: profileVC)
+//        let secondNavController = UINavigationController(rootViewController: profileVC)
         let thirdNavController = UINavigationController(rootViewController: groupVC)
         //let fourthNavController = UINavigationController(rootViewController: userGroupVC)
         
