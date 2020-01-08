@@ -17,6 +17,7 @@
 		5D31F84B23B8B39D00DF4910 /* GroupUsersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D31F84A23B8B39C00DF4910 /* GroupUsersViewController.swift */; };
 		5D50DD8B23ADAAEF00EDB29D /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D50DD8A23ADAAEF00EDB29D /* ProfileViewController.swift */; };
 		5D8EC26423B0EC100046E5B9 /* NewGroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D8EC26323B0EC100046E5B9 /* NewGroupViewController.swift */; };
+		5DA64FB323C667F900BF1C35 /* DetailUserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DA64FB223C667F900BF1C35 /* DetailUserViewController.swift */; };
 		5DCEABB623B00C5800BC8B01 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DCEABB523B00C5800BC8B01 /* ProfileView.swift */; };
 		5DCEABBE23B0C77400BC8B01 /* GroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DCEABBD23B0C77400BC8B01 /* GroupViewController.swift */; };
 		5DCEABC023B0D50600BC8B01 /* GroupTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DCEABBF23B0D50600BC8B01 /* GroupTableViewCell.swift */; };
@@ -40,6 +41,7 @@
 		5D31F84A23B8B39C00DF4910 /* GroupUsersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupUsersViewController.swift; sourceTree = "<group>"; };
 		5D50DD8A23ADAAEF00EDB29D /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		5D8EC26323B0EC100046E5B9 /* NewGroupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGroupViewController.swift; sourceTree = "<group>"; };
+		5DA64FB223C667F900BF1C35 /* DetailUserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailUserViewController.swift; sourceTree = "<group>"; };
 		5DCEABB523B00C5800BC8B01 /* ProfileView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		5DCEABBD23B0C77400BC8B01 /* GroupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupViewController.swift; sourceTree = "<group>"; };
 		5DCEABBF23B0D50600BC8B01 /* GroupTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupTableViewCell.swift; sourceTree = "<group>"; };
@@ -121,6 +123,7 @@
 				5DCEABBD23B0C77400BC8B01 /* GroupViewController.swift */,
 				5D8EC26323B0EC100046E5B9 /* NewGroupViewController.swift */,
 				5D31F84A23B8B39C00DF4910 /* GroupUsersViewController.swift */,
+				5DA64FB223C667F900BF1C35 /* DetailUserViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -268,6 +271,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5DCEABBE23B0C77400BC8B01 /* GroupViewController.swift in Sources */,
+				5DA64FB323C667F900BF1C35 /* DetailUserViewController.swift in Sources */,
 				5DD836F423B0EFAF00AD7DB3 /* GroupView.swift in Sources */,
 				5D8EC26423B0EC100046E5B9 /* NewGroupViewController.swift in Sources */,
 				5D50DD8B23ADAAEF00EDB29D /* ProfileViewController.swift in Sources */,

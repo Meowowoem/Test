@@ -26,8 +26,10 @@ class LoginViewController: UIViewController {
         super.viewWillAppear(animated)
         loginView.loginTextField.text = ""
         loginView.passwordTextField.text = ""
+        loginView.firstNameTextField.text = ""
+        loginView.lastNameTextField.text = ""
+        loginView.emailTextField.text = ""
         tabBarController?.tabBar.isHidden = true
-        
         navigationController?.setNavigationBarHidden(true, animated: animated)
         
     }
