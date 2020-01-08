@@ -16,6 +16,8 @@ class ProfileView: UIView {
     var dateOfBirthTextField = UITextField()
     var buttonGroup = UIButton()
     
+    var buttonDate = UIButton()
+    
     var photoImage = UIImageView()
     var editImageButton = UIButton()
     
@@ -32,10 +34,10 @@ class ProfileView: UIView {
         
         setupImage()
         
-        setupTextField(textField: loginTextField, size: 50)
-        setupTextField(textField: firstNameTextField, size: 80)
-        setupTextField(textField: lastNameTextField, size: 110)
-        setupTextField(textField: dateOfBirthTextField, size: 140)
+        setupTextField(textField: loginTextField, size: 50, tag: 0)
+        setupTextField(textField: firstNameTextField, size: 80, tag: 1)
+        setupTextField(textField: lastNameTextField, size: 110, tag: 2)
+        setupTextField(textField: dateOfBirthTextField, size: 140, tag: 3)
         
         setupLabel(label: loginLabel, text: "Никнейм", size: 50)
         setupLabel(label: firstNameLabel, text: "Имя", size: 80)
@@ -55,10 +57,11 @@ class ProfileView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setupTextField(textField: UITextField, size: Int) {
+    func setupTextField(textField: UITextField, size: Int, tag: Int) {
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.font = UIFont.systemFont(ofSize: 18)
         textField.contentVerticalAlignment = .center
+        textField.tag = tag
         addSubview(textField)
         
         textField.widthAnchor.constraint(equalToConstant: 140).isActive = true
@@ -115,6 +118,18 @@ class ProfileView: UIView {
         buttonGroup.centerXAnchor.constraint(equalTo: photoImage.centerXAnchor).isActive = true
         buttonGroup.heightAnchor.constraint(equalToConstant: 30).isActive = true
         buttonGroup.widthAnchor.constraint(equalToConstant: 100).isActive = true
+        
+        buttonDate.translatesAutoresizingMaskIntoConstraints = false
+        buttonDate.setTitle("✏️", for: .normal)
+        buttonDate.backgroundColor = .black
+        buttonDate.layer.cornerRadius = 5
+        buttonDate.backgroundColor = .none
+        buttonDate.isHidden = true
+        addSubview(buttonDate)
+        
+        buttonDate.topAnchor.constraint(equalTo: dateOfBirthTextField.topAnchor, constant: 0).isActive = true
+        buttonDate.rightAnchor.constraint(equalTo: dateOfBirthTextField.rightAnchor, constant: 0).isActive = true
+        buttonDate.heightAnchor.constraint(equalToConstant: 20).isActive = true
     }
     
 }

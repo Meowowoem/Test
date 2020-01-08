@@ -130,14 +130,29 @@ class NewGroupViewController: UIViewController {
                         
                         let directoryURL : NSURL = downloadUrl as NSURL
                         let urlString: String = directoryURL.absoluteString!
-                        let group = Group(name: self!.groupView.nameTextField.text!, descr: self!.groupView.descriptionTextField.text!, users: "Admin")
+                        let group = Group(name: self!.groupView.nameTextField.text!, descr: self!.groupView.descriptionTextField.text!)
                         if self!.currentId != nil {
                             self!.ref?.child(self!.currentId!).updateChildValues(["name": group.name, "descr": group.descr, "groupImage": urlString])
-                            //self!.ref?.child(self!.currentId!).setValue(["name": group.name, "descr": group.descr, "users": group.users, "groupImage": urlString, "id": self!.currentId!])
+                            
                         } else {
+                            
                             let id = UUID().uuidString
                             let groupRef = self?.ref.child(id)
-                            groupRef?.setValue(["name": group.name, "descr": group.descr, "users": group.users, "groupImage": urlString, "id": id])
+                            var adminNickname: String?
+                            
+                            let userRef = Database.database().reference(withPath: "users").child(self!.user.uid!)
+                            let groupD = DispatchGroup()
+                            groupD.enter()
+                            userRef.observeSingleEvent(of: .value) { snapshot in
+                                let value = snapshot.value as? NSDictionary
+                                adminNickname = value?["nickname"] as? String
+                                groupD.leave()
+                            }
+                            
+                            groupRef?.setValue(["name": group.name, "descr": group.descr, "groupImage": urlString, "id": id])
+                            groupD.notify(queue: DispatchQueue.main) {
+                                groupRef?.child("users").child(adminNickname!).setValue(["role": "admin"])
+                            }
                         }
                         
                     }

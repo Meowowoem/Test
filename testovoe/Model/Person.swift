@@ -17,6 +17,7 @@ class Person {
     var nickname: String?
     var dateOfBirth: String?
     var ref: DatabaseReference?
+    var image: String?
     
     
     
@@ -39,6 +40,7 @@ class Person {
         lastName = snapshotValue["lastName"] as? String
         nickname = snapshotValue["nickname"] as? String
         dateOfBirth = snapshotValue["dateOfBirth"] as? String
+        image = snapshotValue["userImage"] as? String
         ref = snapshot.ref
     }
     

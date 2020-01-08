@@ -36,6 +36,7 @@ class GroupViewController: UIViewController {
         title = "Группы"
         
         setupTable()
+
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addNewGroup))
         

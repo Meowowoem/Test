@@ -72,6 +72,10 @@ class ProfileViewController: UIViewController {
         }
         
         
+        profileView.firstNameTextField.delegate = self
+        profileView.lastNameTextField.delegate = self
+        profileView.dateOfBirthTextField.delegate = self
+        
         
     }
     
@@ -89,10 +93,9 @@ class ProfileViewController: UIViewController {
         let tapKey: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tapKey)
         
-        
-        profileView.dateOfBirthTextField.addTarget(self, action: #selector(chooseDate), for: .editingDidBegin)
-        profileView.loginTextField.addTarget(self, action: #selector(textFieldChanged), for: .editingChanged)
-        
+        profileView.firstNameTextField.addTarget(self, action: #selector(textFieldChanged), for: .editingChanged)
+        profileView.lastNameTextField.addTarget(self, action: #selector(textFieldChanged), for: .editingChanged)
+        profileView.buttonDate.addTarget(self, action: #selector(chooseDate), for: .touchUpInside)
     }
     
     
@@ -106,13 +109,14 @@ class ProfileViewController: UIViewController {
     //MARK: - Allows editing
     @objc func editProfile() {
         textFieldIsEditing = true
+        profileView.loginTextField.isEnabled = false
+        profileView.dateOfBirthTextField.isEnabled = false
         navigationItem.rightBarButtonItem?.isEnabled = false
         profileView.photoImage.isUserInteractionEnabled = true
         profileView.photoImage.layer.borderWidth = 4
-        profileView.loginTextField.borderStyle = .roundedRect
         profileView.firstNameTextField.borderStyle = .roundedRect
         profileView.lastNameTextField.borderStyle = .roundedRect
-        profileView.dateOfBirthTextField.borderStyle = .roundedRect
+        profileView.buttonDate.isHidden = false
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveProfile))
     }
@@ -159,7 +163,7 @@ class ProfileViewController: UIViewController {
     
     //MARK: - Save changes
     @objc func saveProfile() {
-        
+        dismissKeyboard()
         let imageName = user.uid
         let storageRef = Storage.storage().reference().child("\(imageName!).png")
         
@@ -188,10 +192,9 @@ class ProfileViewController: UIViewController {
         textFieldIsEditing = false
         profileView.photoImage.isUserInteractionEnabled = false
         profileView.photoImage.layer.borderWidth = 0
-        profileView.loginTextField.borderStyle = .none
         profileView.firstNameTextField.borderStyle = .none
         profileView.lastNameTextField.borderStyle = .none
-        profileView.dateOfBirthTextField.borderStyle = .none
+        profileView.buttonDate.isHidden = true
         
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editProfile))
@@ -199,9 +202,9 @@ class ProfileViewController: UIViewController {
     
     //MARK: - Choose date
     @objc func chooseDate() {
-        print("OK")
-        
+        print("123")
         dismissKeyboard()
+        
         picker = UIDatePicker()
         picker.datePickerMode = .date
         
@@ -259,11 +262,17 @@ extension ProfileViewController: UITextFieldDelegate {
     }
     
     @objc func textFieldChanged() {
-        if profileView.loginTextField.text?.isEmpty == false {
+        if profileView.firstNameTextField.text?.isEmpty == false && profileView.lastNameTextField.text?.isEmpty == false {
             navigationItem.rightBarButtonItem?.isEnabled = true
         } else {
             navigationItem.rightBarButtonItem?.isEnabled = false
         }
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        
+            textField.resignFirstResponder()
+        return true
     }
 }
 
@@ -289,4 +298,3 @@ extension ProfileViewController: UIImagePickerControllerDelegate, UINavigationCo
     
     
 }
-

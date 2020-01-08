@@ -237,7 +237,12 @@ class LoginViewController: UIViewController {
                             let user = Person(user: currentUser)
                             
                             let ref = Database.database().reference(withPath: "users").child(user.uid!)
-                            ref.setValue(["firstName": self?.loginView.firstNameTextField.text, "lastName": self?.loginView.lastNameTextField.text, "nickname": self?.loginView.loginTextField.text, "dateOfBirth": "не указано", "userImage": nil, "email": user.email])
+                            ref.setValue(["firstName": self?.loginView.firstNameTextField.text?.capitalized ?? "",
+                                          "lastName": self?.loginView.lastNameTextField.text?.capitalized ?? "",
+                                          "nickname": self?.loginView.loginTextField.text?.capitalized ?? "",
+                                          "dateOfBirth": "не указано",
+                                          "userImage": nil,
+                                          "email": user.email!])
                         }
                     } else {
                         switch error {
