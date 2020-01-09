@@ -243,7 +243,7 @@ class LoginViewController: UIViewController {
                                           "lastName": self?.loginView.lastNameTextField.text?.capitalized ?? "",
                                           "nickname": self?.loginView.loginTextField.text?.capitalized ?? "",
                                           "dateOfBirth": "не указано",
-                                          "userImage": "https://firebasestorage.googleapis.com/v0/b/testovoe-8ae15.appspot.com/o/qduKstmnAgd9qCgvjIIKW7YoC1E3.png?alt=media&token=de4fc6a3-e8c3-49fa-9a4e-3a3cd115b342",
+                                          "userImage": "https://firebasestorage.googleapis.com/v0/b/testovoe-8ae15.appspot.com/o/ZqjH9N8U7BOu0LTe07d5daWGwk12.png?alt=media&token=13ffc86f-fe01-47d3-a60c-dbb62f589b91",
                                           "email": user.email!])
                             
 //                            let storageRef = Storage.storage().reference().child("default.png")

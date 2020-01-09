@@ -30,6 +30,11 @@ class GroupViewController: UIViewController {
         
     }
     
+//    override func viewWillDisappear(_ animated: Bool) {
+//        super.viewWillDisappear(animated)
+//        ref.removeAllObservers()
+//    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -47,7 +52,7 @@ class GroupViewController: UIViewController {
     func getData() {
         ref = Database.database().reference(withPath: "groups")
         
-        ref.observeSingleEvent(of: .value) { [weak self] (snapshot) in
+        ref.observe(.value) { [weak self] (snapshot) in
             var _groups = Array<Group>()
             for item in snapshot.children {
                 let group = Group(snapshot: item as! DataSnapshot)

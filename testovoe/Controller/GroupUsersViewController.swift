@@ -24,6 +24,11 @@ class GroupUsersViewController: UIViewController {
 
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        ref.reference(withPath: "groups").child(currentId!).child("users").removeAllObservers()
+    }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -56,7 +61,7 @@ class GroupUsersViewController: UIViewController {
     }
     
     func getUsers() {
-        ref.reference(withPath: "groups").child(currentId!).child("users").observeSingleEvent(of: .value) { [weak self] snapshot in
+        ref.reference(withPath: "groups").child(currentId!).child("users").observe(.value) { [weak self] snapshot in
             
             let value = snapshot.value as? NSDictionary
             
@@ -68,7 +73,7 @@ class GroupUsersViewController: UIViewController {
     }
     
     func getAllUsers() {
-        ref.reference(withPath: "users").observeSingleEvent(of: .value) { [weak self] (snapshot) in
+        ref.reference(withPath: "users").observe(.value) { [weak self] (snapshot) in
             var _users = Array<Person>()
             var array = Array<Person>()
             
