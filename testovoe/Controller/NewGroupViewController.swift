@@ -183,7 +183,7 @@ class NewGroupViewController: UIViewController {
             
             let showGroupRef = ref.child(currentId!)
             
-            showGroupRef.observe(.value) { [weak self] (snapshot) in
+            showGroupRef.observeSingleEvent(of: .value) { [weak self] (snapshot) in
                 
                 if let dictionary = snapshot.value as? [String: AnyObject] {
                     

@@ -56,7 +56,7 @@ class GroupUsersViewController: UIViewController {
     }
     
     func getUsers() {
-        ref.reference(withPath: "groups").child(currentId!).child("users").observe(.value) { [weak self] snapshot in
+        ref.reference(withPath: "groups").child(currentId!).child("users").observeSingleEvent(of: .value) { [weak self] snapshot in
             
             let value = snapshot.value as? NSDictionary
             

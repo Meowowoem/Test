@@ -136,7 +136,7 @@ class ProfileViewController: UIViewController {
     //MARK: - Show profile
     func showProfile() {
         
-        ref.observe(.value) { [weak self] (snapshot) in
+        ref.observeSingleEvent(of: .value) { [weak self] (snapshot) in
             
             if let dictionary = snapshot.value as? [String: AnyObject] {
                 self!.profileView.firstNameTextField.text = dictionary["firstName"] as? String

@@ -243,8 +243,33 @@ class LoginViewController: UIViewController {
                                           "lastName": self?.loginView.lastNameTextField.text?.capitalized ?? "",
                                           "nickname": self?.loginView.loginTextField.text?.capitalized ?? "",
                                           "dateOfBirth": "не указано",
-                                          "userImage": nil,
+                                          "userImage": "https://firebasestorage.googleapis.com/v0/b/testovoe-8ae15.appspot.com/o/qduKstmnAgd9qCgvjIIKW7YoC1E3.png?alt=media&token=de4fc6a3-e8c3-49fa-9a4e-3a3cd115b342",
                                           "email": user.email!])
+                            
+//                            let storageRef = Storage.storage().reference().child("default.png")
+//
+//                            if let uploadData = UIImage(named: "personPhoto")?.pngData() {
+//                                storageRef.putData(uploadData, metadata: nil) { (metadata, error) in
+//                                    if error != nil {
+//                                        print(error!)
+//                                        return
+//                                    }
+//
+//
+//                                    storageRef.downloadURL { [weak self] (url, error) in
+//                                        if let downloadUrl = url {
+//
+//                                            let directoryURL : NSURL = downloadUrl as NSURL
+//                                            let urlString: String = directoryURL.absoluteString!
+//
+//
+//                                            //вернуть код
+//
+//
+//                                        }
+//                                    }
+//                                }
+//                            }
                         }
                     } else {
                         switch error {

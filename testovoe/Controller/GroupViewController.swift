@@ -47,7 +47,7 @@ class GroupViewController: UIViewController {
     func getData() {
         ref = Database.database().reference(withPath: "groups")
         
-        ref.observe(.value) { [weak self] (snapshot) in
+        ref.observeSingleEvent(of: .value) { [weak self] (snapshot) in
             var _groups = Array<Group>()
             for item in snapshot.children {
                 let group = Group(snapshot: item as! DataSnapshot)
