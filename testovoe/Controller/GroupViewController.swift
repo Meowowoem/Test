@@ -19,6 +19,8 @@ class GroupViewController: UIViewController {
     var ref: DatabaseReference!
     var groups = Array<Group>()
     var gradientLayer = CAGradientLayer()
+    var currentUser: String!
+    
     override func viewDidAppear(_ animated: Bool) {
         groupTable.reloadData()
     }
@@ -27,6 +29,7 @@ class GroupViewController: UIViewController {
         super.viewWillAppear(animated)
         
         getData()
+        
         
     }
     
@@ -48,19 +51,45 @@ class GroupViewController: UIViewController {
         
         refresh.addTarget(self, action: #selector(updateTable), for: .valueChanged)
         groupTable.refreshControl = refresh
+        
+        
     }
     
     func getData() {
         ref = Database.database().reference(withPath: "groups")
         
-        ref.observe(.value) { [weak self] (snapshot) in
-            var _groups = Array<Group>()
-            for item in snapshot.children {
-                let group = Group(snapshot: item as! DataSnapshot)
-                _groups.append(group)
-            }
-            self?.groups = _groups
-            self?.groupTable.reloadData()
+            ref.observe(.value) { [weak self] (snapshot) in
+                var _groups = Array<Group>()
+                let value = snapshot.value as? NSDictionary
+                let _groupNames = value?.allKeys as? [String]
+                for item in snapshot.children {
+                    let group = Group(snapshot: item as! DataSnapshot)
+                    _groups.append(group)
+                }
+                if self?.currentUser == nil {
+                    self?.groups = _groups
+                    self?.groupTable.reloadData()
+                } else {
+                    var i = 0
+                    var newGroups = Array<Group>()
+                    for name in _groupNames! {
+                        self?.ref.child(name).child("users").observeSingleEvent(of: .value) { [weak self] (snapshot) in
+                            let value = snapshot.value as? NSDictionary
+                            let users = value?.allKeys as! [String]
+                            if users.contains(self!.currentUser) {
+                                newGroups.append(_groups[i])
+                                self?.groups = newGroups
+                                self?.groupTable.reloadData()
+                            }
+                            i += 1
+                        }
+                        
+                    }
+                    
+                    
+                }
+                
+                
         }
     }
     

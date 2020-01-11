@@ -108,10 +108,9 @@ class ProfileView: UIView {
     
     func setupButton() {
         buttonGroup.translatesAutoresizingMaskIntoConstraints = false
-        buttonGroup.setTitle("Группы", for: .normal)
+        buttonGroup.setTitle("Мои группы", for: .normal)
         buttonGroup.backgroundColor = .black
         buttonGroup.layer.cornerRadius = 5
-        buttonGroup.isHidden = true
         addSubview(buttonGroup)
         
         
@@ -119,7 +118,7 @@ class ProfileView: UIView {
         buttonGroup.topAnchor.constraint(equalTo: photoImage.bottomAnchor, constant: 200).isActive = true
         buttonGroup.centerXAnchor.constraint(equalTo: photoImage.centerXAnchor).isActive = true
         buttonGroup.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        buttonGroup.widthAnchor.constraint(equalToConstant: 100).isActive = true
+        buttonGroup.widthAnchor.constraint(equalToConstant: 150).isActive = true
         
         buttonDate.translatesAutoresizingMaskIntoConstraints = false
         buttonDate.setTitle("✏️", for: .normal)

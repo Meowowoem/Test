@@ -122,7 +122,9 @@ class ProfileViewController: UIViewController {
     
     //MARK: - Go to groups
     @objc func goToGroups() {
-        navigationController?.pushViewController(GroupViewController(), animated: true)
+        let groupVC = GroupViewController()
+        groupVC.currentUser = profileView.loginTextField.text
+        navigationController?.pushViewController(groupVC, animated: true)
     }
     
     

@@ -16,7 +16,7 @@ class Group {
     var descr: String
     var image: String?
     var ref: DatabaseReference?
-    var users: String?
+    var users: Array<String>?
     var id: String?
     
     init (name: String, descr: String) {
@@ -29,7 +29,7 @@ class Group {
         name = snapshotValue["name"] as! String
         descr = snapshotValue["descr"] as! String
         image = snapshotValue["groupImage"] as? String
-        users = snapshotValue["users"] as? String
+        users = snapshotValue["users"] as? Array<String>
         ref = snapshot.ref
         id = snapshotValue["id"] as? String
     }

@@ -164,9 +164,9 @@ class NewGroupViewController: UIViewController {
                                 adminNickname = value?["nickname"] as? String
                                 groupD.leave()
                             }
-                            
-                            groupRef?.setValue(["name": group.name, "descr": group.descr, "groupImage": urlString, "id": id])
                             groupD.notify(queue: DispatchQueue.main) {
+                            groupRef?.setValue(["name": group.name, "descr": group.descr, "groupImage": urlString, "id": id])
+                            
                                 groupRef?.child("users").child(adminNickname!).setValue(["role": "admin"])
                             }
                         }
