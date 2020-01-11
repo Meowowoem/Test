@@ -16,6 +16,7 @@ class LoginViewController: UIViewController {
     var gradientLayer: CAGradientLayer!
     
     let ref = Database.database().reference(withPath: "users")
+    let auth = Auth.auth()
     
     var tabBarItemONE: UITabBarItem = UITabBarItem()
     var tabBarItemTWO: UITabBarItem = UITabBarItem()
@@ -39,7 +40,7 @@ class LoginViewController: UIViewController {
         tabBarController?.tabBar.isHidden = false
         
         navigationController?.setNavigationBarHidden(false, animated: animated)
-        
+        tabBarController?.delegate = self
         
     }
     
@@ -143,24 +144,11 @@ class LoginViewController: UIViewController {
     }
     
     func checkAuth() {
-        Auth.auth().addStateDidChangeListener { [weak self] (auth, user) in
+        auth.addStateDidChangeListener { [weak self] (auth, user) in
             if user != nil {
                 let profileVC = ProfileViewController()
-//                profileVC.currentLogin = (self?.loginView.loginTextField.text)!
                 self?.navigationController?.pushViewController(profileVC, animated: true)
             }
-            //MARK: - Allow tabbar
-//                else {
-//                let tabBarControllerItems = self?.tabBarController?.tabBar.items
-//
-//                if let arrayOfTabBarItems = tabBarControllerItems as AnyObject as? NSArray{
-//
-//
-//                    self?.tabBarItemTWO = arrayOfTabBarItems[1] as! UITabBarItem
-//                    self?.tabBarItemTWO.isEnabled = false
-//
-//                }
-//            }
         }
     }
     
@@ -191,7 +179,7 @@ class LoginViewController: UIViewController {
         }
         //MARK: - Login and error handler
         group.notify(queue: DispatchQueue.main) {
-            Auth.auth().signIn(withEmail: email, password: inputPass) { [weak self] (user, error) in
+            self.auth.signIn(withEmail: email, password: inputPass) { [weak self] (user, error) in
                 
                 switch error {
                 case .some(let error as NSError) where error.code == AuthErrorCode.wrongPassword.rawValue:
@@ -231,11 +219,11 @@ class LoginViewController: UIViewController {
         }
         group.notify(queue: DispatchQueue.main) {
             if loginExists == false {
-                Auth.auth().createUser(withEmail: self.loginView.emailTextField.text!, password: self.loginView.passwordTextField.text!) { [weak self] (user, error) in
+                self.auth.createUser(withEmail: self.loginView.emailTextField.text!, password: self.loginView.passwordTextField.text!) { [weak self] (user, error) in
                     if error == nil {
                         if user != nil {
                             print("Добавили пользователя!")
-                            guard let currentUser = Auth.auth().currentUser else { return }
+                            guard let currentUser = self?.auth.currentUser else { return }
                             let user = Person(user: currentUser)
                             
                             let ref = Database.database().reference(withPath: "users").child(user.uid!)
@@ -246,30 +234,7 @@ class LoginViewController: UIViewController {
                                           "userImage": "https://firebasestorage.googleapis.com/v0/b/testovoe-8ae15.appspot.com/o/ZqjH9N8U7BOu0LTe07d5daWGwk12.png?alt=media&token=13ffc86f-fe01-47d3-a60c-dbb62f589b91",
                                           "email": user.email!])
                             
-//                            let storageRef = Storage.storage().reference().child("default.png")
-//
-//                            if let uploadData = UIImage(named: "personPhoto")?.pngData() {
-//                                storageRef.putData(uploadData, metadata: nil) { (metadata, error) in
-//                                    if error != nil {
-//                                        print(error!)
-//                                        return
-//                                    }
-//
-//
-//                                    storageRef.downloadURL { [weak self] (url, error) in
-//                                        if let downloadUrl = url {
-//
-//                                            let directoryURL : NSURL = downloadUrl as NSURL
-//                                            let urlString: String = directoryURL.absoluteString!
-//
-//
-//                                            //вернуть код
-//
-//
-//                                        }
-//                                    }
-//                                }
-//                            }
+
                         }
                     } else {
                         switch error {
@@ -339,5 +304,11 @@ extension LoginViewController: UITextFieldDelegate {
             }
         }
         return true
+    }
+}
+
+extension LoginViewController: UITabBarControllerDelegate {
+    func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
+        return viewController != tabBarController.selectedViewController
     }
 }

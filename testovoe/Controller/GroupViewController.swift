@@ -18,7 +18,7 @@ class GroupViewController: UIViewController {
     var user: Person!
     var ref: DatabaseReference!
     var groups = Array<Group>()
-    
+    var gradientLayer = CAGradientLayer()
     override func viewDidAppear(_ animated: Bool) {
         groupTable.reloadData()
     }
@@ -42,6 +42,7 @@ class GroupViewController: UIViewController {
         
         setupTable()
 
+        setupGradient()
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addNewGroup))
         
@@ -85,7 +86,10 @@ class GroupViewController: UIViewController {
         navigationController?.pushViewController(newGroupVC, animated: true)
     }
     
-    
+    func setupGradient() {
+        
+        tabBarController?.tabBar.barTintColor = UIColor(red: 0.38, green: 0.22, blue: 0.48, alpha: 1)
+    }
     
 }
 

@@ -21,11 +21,15 @@ class ProfileViewController: UIViewController {
     
     var ref: DatabaseReference!
     
+    let auth = Auth.auth()
+    
     var usersArray = Array<Person>()
     
     var textFieldIsEditing = false
     
     var currentLogin = ""
+    
+    var gradientLayer: CAGradientLayer!
     
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -44,7 +48,7 @@ class ProfileViewController: UIViewController {
         
         
         
-        guard let currentUser = Auth.auth().currentUser else {
+        guard let currentUser = auth.currentUser else {
             navigationController?.pushViewController(LoginViewController(), animated: true)
             return
         }
@@ -64,6 +68,7 @@ class ProfileViewController: UIViewController {
         print(currentLogin)
         
         showProfile()
+        setupGradient()
         
         buttons()
         
@@ -84,7 +89,7 @@ class ProfileViewController: UIViewController {
     }
     
     func buttons() {
-        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .close, target: self, action: #selector(exit))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Выйти", style: .done, target: self, action: #selector(exit))
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editProfile))
         
         profileView.buttonGroup.addTarget(self, action: #selector(goToGroups), for: .touchUpInside)
@@ -102,6 +107,18 @@ class ProfileViewController: UIViewController {
         profileView.buttonDate.addTarget(self, action: #selector(chooseDate), for: .touchUpInside)
     }
     
+    func setupGradient() {
+        gradientLayer = CAGradientLayer()
+                profileView.layer.insertSublayer(gradientLayer, at: 0)
+                gradientLayer.startPoint = CGPoint(x: 0, y: 0)
+                gradientLayer.endPoint = CGPoint(x: 0, y: 1)
+        gradientLayer.colors = [UIColor(red: 1, green: 0, blue: 0.22, alpha: 0.1).cgColor, UIColor(red: 0.38, green: 0.22, blue: 0.48, alpha: 1).cgColor]
+        gradientLayer.frame = CGRect(x: 0, y: 0, width: view.bounds.width, height: view.bounds.height)
+        
+        tabBarController?.tabBar.barTintColor = UIColor(red: 0.55, green: 0.20, blue: 0.55, alpha: 1)
+        
+        tabBarController?.tabBar.unselectedItemTintColor = .white
+    }
     
     //MARK: - Go to groups
     @objc func goToGroups() {
@@ -127,14 +144,22 @@ class ProfileViewController: UIViewController {
     
     //MARK: - Logout
     @objc func exit() {
-        
-        do {
-            try Auth.auth().signOut()
-        } catch {
-            print(error.localizedDescription)
+        let alert = UIAlertController(title: "Вы действительно хотите выйти?", message: nil , preferredStyle: .alert)
+        let exit = UIAlertAction(title: "Да", style: .default) { (action) in
+            do {
+                try self.auth.signOut()
+            } catch {
+                print(error.localizedDescription)
+            }
+            self.navigationController?.popViewController(animated: true)
+            
         }
-        navigationController?.popViewController(animated: true)
+        let close = UIAlertAction(title: "Нет", style: .cancel)
+        alert.addAction(exit)
+        alert.addAction(close)
+        present(alert, animated: true)
         
+
     }
     
     //MARK: - Show profile
@@ -195,7 +220,7 @@ class ProfileViewController: UIViewController {
         }
         textFieldIsEditing = false
         profileView.photoImage.isUserInteractionEnabled = false
-        profileView.photoImage.layer.borderWidth = 0
+        profileView.photoImage.layer.borderWidth = 2
         profileView.firstNameTextField.borderStyle = .none
         profileView.lastNameTextField.borderStyle = .none
         profileView.buttonDate.isHidden = true

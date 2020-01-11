@@ -73,7 +73,7 @@ class GroupUsersViewController: UIViewController {
     }
     
     func getAllUsers() {
-        ref.reference(withPath: "users").observe(.value) { [weak self] (snapshot) in
+        ref.reference(withPath: "users").observeSingleEvent(of: .value) { [weak self] (snapshot) in
             var _users = Array<Person>()
             var array = Array<Person>()
             
@@ -234,15 +234,7 @@ extension GroupUsersViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let detailVC = DetailUserViewController()
         let user = users[indexPath.row]
-//        print(users[indexPath.row].firstName)
-//        print(users[indexPath.row].lastName)
-//        print(users[indexPath.row].nickname)
-//        print(users[indexPath.row].dateOfBirth)
-        
-//        detailVC.profileView.firstNameTextField.text? = user.firstName
-//        detailVC.profileView.lastNameTextField.text? = user.lastName
-//        detailVC.profileView.loginTextField.text? = user.nickname
-//        detailVC.profileView.dateOfBirthTextField.text? = user.dateOfBirth
+
         
         detailVC.nickname = user.nickname
         detailVC.firstName = user.firstName

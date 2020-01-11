@@ -11,7 +11,6 @@ import UIKit
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
-//    var navController = UINavigationController()
     var viewController: UIViewController!
     let currentUser = UserDefaults.standard.string(forKey: "currentUser")
     

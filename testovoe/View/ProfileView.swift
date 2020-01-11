@@ -73,7 +73,7 @@ class ProfileView: UIView {
     
     func setupLabel(label: UILabel, text: String, size: Int) {
         label.font = UIFont.systemFont(ofSize: 16)
-        label.textColor = .gray
+        label.textColor = .white
         label.text = text
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .right
@@ -91,6 +91,8 @@ class ProfileView: UIView {
         photoImage.translatesAutoresizingMaskIntoConstraints = false
         photoImage.contentMode = .scaleAspectFill
         photoImage.layer.borderColor = UIColor.black.cgColor
+        photoImage.layer.borderWidth = 2
+        photoImage.layer.borderColor = UIColor.white.cgColor
         addSubview(photoImage)
         
         

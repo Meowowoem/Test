@@ -59,7 +59,7 @@ class GroupView: UIView {
     
     func setupLabel(label: UILabel, text: String, size: Int) {
         label.font = UIFont.systemFont(ofSize: 16)
-        label.textColor = .gray
+        label.textColor = .white
         label.text = text
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .right
@@ -76,6 +76,8 @@ class GroupView: UIView {
         photoGroup.clipsToBounds = true
         photoGroup.translatesAutoresizingMaskIntoConstraints = false
         photoGroup.contentMode = .scaleAspectFill
+        photoGroup.layer.borderWidth = 2
+        photoGroup.layer.borderColor = UIColor.white.cgColor
     
         addSubview(photoGroup)
         

@@ -19,6 +19,7 @@ class NewGroupViewController: UIViewController {
     var groups = Array<Group>()
     var currentId: String?
     var photoIsChanged = false
+    var gradientLayer = CAGradientLayer()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,6 +40,8 @@ class NewGroupViewController: UIViewController {
         NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillHideNotification, object: nil, queue: nil) { (nc) in
             self.view.frame.origin.y = 0
         }
+        
+        setupGradient()
     }
     
     func buttons() {
@@ -62,6 +65,19 @@ class NewGroupViewController: UIViewController {
         
         let tapKey: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tapKey)
+    }
+    
+    func setupGradient() {
+        gradientLayer = CAGradientLayer()
+                groupView.layer.insertSublayer(gradientLayer, at: 0)
+                gradientLayer.startPoint = CGPoint(x: 0, y: 0)
+                gradientLayer.endPoint = CGPoint(x: 0, y: 1)
+        gradientLayer.colors = [UIColor(red: 1, green: 0, blue: 0.22, alpha: 0.1).cgColor, UIColor(red: 0.38, green: 0.22, blue: 0.48, alpha: 1).cgColor]
+        gradientLayer.frame = CGRect(x: 0, y: 0, width: view.bounds.width, height: view.bounds.height)
+        
+        tabBarController?.tabBar.barTintColor = UIColor(red: 0.55, green: 0.20, blue: 0.55, alpha: 1)
+        
+        tabBarController?.tabBar.unselectedItemTintColor = .white
     }
     
     func currentTitle() {
