@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		19AB264E12D3C6D2725B7C3F /* Pods_testovoe.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9A50393CD4DBD936D1AA875 /* Pods_testovoe.framework */; };
 		5D138F9F23C63CA3005296C2 /* GroupUsersTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D138F9E23C63CA3005296C2 /* GroupUsersTableViewCell.swift */; };
+		5D1A23FE23CB62B20063E64E /* TestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D1A23FD23CB62B20063E64E /* TestViewController.swift */; };
 		5D1B419023AD3C28006233B1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D1B418F23AD3C28006233B1 /* AppDelegate.swift */; };
 		5D1B419223AD3C28006233B1 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D1B419123AD3C28006233B1 /* SceneDelegate.swift */; };
 		5D1B419423AD3C28006233B1 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D1B419323AD3C28006233B1 /* LoginViewController.swift */; };
@@ -31,6 +32,7 @@
 
 /* Begin PBXFileReference section */
 		5D138F9E23C63CA3005296C2 /* GroupUsersTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupUsersTableViewCell.swift; sourceTree = "<group>"; };
+		5D1A23FD23CB62B20063E64E /* TestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestViewController.swift; sourceTree = "<group>"; };
 		5D1B418C23AD3C28006233B1 /* testovoe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = testovoe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5D1B418F23AD3C28006233B1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5D1B419123AD3C28006233B1 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -124,6 +126,7 @@
 				5D8EC26323B0EC100046E5B9 /* NewGroupViewController.swift */,
 				5D31F84A23B8B39C00DF4910 /* GroupUsersViewController.swift */,
 				5DA64FB223C667F900BF1C35 /* DetailUserViewController.swift */,
+				5D1A23FD23CB62B20063E64E /* TestViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -272,6 +275,7 @@
 			files = (
 				5DCEABBE23B0C77400BC8B01 /* GroupViewController.swift in Sources */,
 				5DA64FB323C667F900BF1C35 /* DetailUserViewController.swift in Sources */,
+				5D1A23FE23CB62B20063E64E /* TestViewController.swift in Sources */,
 				5DD836F423B0EFAF00AD7DB3 /* GroupView.swift in Sources */,
 				5D8EC26423B0EC100046E5B9 /* NewGroupViewController.swift in Sources */,
 				5D50DD8B23ADAAEF00EDB29D /* ProfileViewController.swift in Sources */,
